@@ -1,0 +1,35 @@
+{
+  "name": "elm-app-boilerplate",
+  "version": "0.1.0",
+  "description": "Elm application boilerplate",
+  "scripts": {
+    "start": "parallelshell \"npm run watch-images\" \"npm run watch-styles\" \"npm run watch-elm\" \"npm run watch-html\" \"npm run browser-sync\"",
+    "build": "npm run clean && npm run images && npm run styles && npm run elm && npm run html",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf ./public/",
+    "watch-images": "nodemon --watch './src/images/' --ext png,jpg,gif,svg --exec 'npm run images'",
+    "watch-styles": "nodemon --watch './src/styles/' --ext less --exec 'npm run styles-dev'",
+    "watch-elm": "nodemon --watch './src/' --ignore './src/scripts/' --ext js,elm --exec 'npm run elm-dev'",
+    "watch-html": "nodemon --watch './src/' --ext html --exec 'npm run html'",
+    "images": "mkdir -p public && rsync -r --delete ./src/images/ ./public/images/",
+    "styles": "lessc --clean-css --autoprefix='last 2 versions' ./src/styles/app.less ./public/styles/app.css",
+    "styles-dev": "lessc --source-map --source-map-less-inline --clean-css --autoprefix='last 2 versions' ./src/styles/app.less ./public/styles/app.css",
+    "elm": "./scripts/build-elm-min.sh ./public/scripts/elm.js",
+    "elm-dev": "./scripts/build-elm.sh ./public/scripts/elm.js",
+    "html": "mkdir -p public && rsync ./src/index.html ./public/index.html",
+    "browser-sync": "mkdir -p public && cd public && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --server --files '**/*'"
+  },
+  "author": "Greg Kubisa <gkubisa@gmail.com>",
+  "license": "MIT",
+  "repository": "gkubisa/elm-app-boilerplate",
+  "devDependencies": {
+    "browser-sync": "^2.11.1",
+    "elm": "^0.16.0",
+    "less": "^2.6.0",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "nodemon": "^1.8.1",
+    "parallelshell": "^2.0.0",
+    "uglify-js": "^2.6.1"
+  }
+}
