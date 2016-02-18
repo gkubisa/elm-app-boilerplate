@@ -5,11 +5,12 @@
   "scripts": {
     "start": "parallelshell \"npm run watch-images\" \"npm run watch-styles\" \"npm run watch-elm\" \"npm run watch-html\" \"npm run browser-sync\"",
     "build": "npm run clean && npm run images && npm run styles && npm run elm && npm run html",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "elm-test test/TestRunner.elm",
+    "tdd": "nodemon --watch './src/' --watch './test/' --ext js,elm --exec 'npm test'",
     "clean": "rm -rf ./public/",
     "watch-images": "nodemon --watch './src/images/' --ext png,jpg,gif,svg --exec 'npm run images'",
     "watch-styles": "nodemon --watch './src/styles/' --ext less --exec 'npm run styles-dev'",
-    "watch-elm": "nodemon --watch './src/' --ignore './src/scripts/' --ext js,elm --exec 'npm run elm-dev'",
+    "watch-elm": "nodemon --watch './src/' --ext js,elm --exec 'npm run elm-dev'",
     "watch-html": "nodemon --watch './src/' --ext html --exec 'npm run html'",
     "images": "mkdir -p public && rsync -r --delete ./src/images/ ./public/images/",
     "styles": "lessc --clean-css --autoprefix='last 2 versions' ./src/styles/app.less ./public/styles/app.css",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "browser-sync": "^2.11.1",
     "elm": "^0.16.0",
+    "elm-test": "^0.16.0",
     "less": "^2.6.0",
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1",
