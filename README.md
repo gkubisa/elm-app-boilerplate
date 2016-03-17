@@ -15,7 +15,7 @@ Open `http://localhost:3000/` in a browser.
 
 Start coding! :-)
 
-The application files are automatically rebuilt on code change and stored in `./public`. That directory is then served by `browser-sync`, which also reloads the browser on any file change.
+The application files are automatically rebuilt on code change and stored in `./dist`. That directory is then served by `browser-sync`, which also reloads the browser on any file change.
 
 ## Preparing for Deployment
 
@@ -23,7 +23,7 @@ The application files are automatically rebuilt on code change and stored in `./
 npm run build
 ```
 
-The application code ready for deployment will be stored in `./public`.
+The application code ready for deployment will be stored in `./dist`.
 
 ## Testing
 
@@ -42,7 +42,7 @@ npm run tdd
 ## Directory Structure
 
 - `scripts/` - build and deployment helper scripts
-- `public/` - built application artifacts, used by both `npm start` and `npm run build`
+- `dist/` - built application artifacts, used by both `npm start` and `npm run build`
 - `src/` - all source files
 - `src/index.html` - overall application entry point
 - `src/Main.elm` - Elm application entry point
