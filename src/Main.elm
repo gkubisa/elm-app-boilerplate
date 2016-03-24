@@ -4,13 +4,14 @@ import StartApp exposing (start)
 import Task exposing (Task)
 import Effects exposing (Effects)
 import Html
+import ElmAppBoilerplate.Page as Page
 
-app : StartApp.App String
+app : StartApp.App Page.Model
 app =
   start
-    { init = ("Elm App Boilerplate", Effects.none)
-    , view = (\address model -> Html.text model)
-    , update = (\action model -> (model, Effects.none))
+    { init = Page.init "Welcome to Elm App Boilerplate" "Happy coding! :-)"
+    , view = Page.view
+    , update = Page.update
     , inputs = []
     }
 
