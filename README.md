@@ -1,6 +1,6 @@
 # Elm App Boilerplate
 
-Elm application boilerplate providing an efficient development workflow.
+Provides an efficient development workflow and is a good starting point for building Elm applications. It offers a head start on the UI implementation by integrating with the [Semantic UI](http://semantic-ui.com/) framework.
 
 ## Getting Started
 
@@ -41,12 +41,20 @@ npm run tdd
 
 ## Directory Structure
 
-- `scripts/` - build and deployment helper scripts
+- `package.json` - used mostly for build and deployment support
+- `elm-package.json` - describes the Elm application and its dependencies
+- `semantic.json` - the main Semantic UI configuration file
 - `dist/` - built application artifacts, used by both `npm start` and `npm run build`
+- `test/` - directory containing all the tests
+- `test/TestRunner.elm` - the entry point for executing tests, bootstraps the actual test runner
+- `test/Tests.elm` - the main file loading and exposing all the test suites
 - `src/` - all source files
 - `src/index.html` - overall application entry point
 - `src/Main.elm` - Elm application entry point
-- `src/styles/` - all styles
-- `src/images/` - all images
-- `elm-package.json` - describes the Elm application and its dependencies
-- `package.json` - used mostly for build and deployment support
+- `src/ElmAppBoilerplate` - the namespace for all `elm-app-boilerplate` Elm modules
+- `src/definitions/` - Semantic UI component definitions
+- `src/themes/` - Semantic UI themes
+- `src/site/` - Semantic UI variables and overrides for this application
+- `src/theme.config` - defines which theme to use for each Semantic UI component
+- `src/semantic.less` and `src/theme.less` - other Semantic UI files
+- `tasks` and `gulpfile.js` - gulp scripts for building Semantic UI
