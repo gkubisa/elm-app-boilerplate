@@ -20,7 +20,7 @@
     "prehtml": "mkdir -p dist",
     "html": "rsync ./src/index.html ./dist/index.html",
     "prebrowser-sync": "mkdir -p dist",
-    "browser-sync": "cd dist && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --server --files 'themes/**/*, *.js, *.css, *.html'"
+    "browser-sync": "cd dist && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --reload-debounce 2500 --server --files 'themes/**/*, *.js, *.css, *.html'"
   },
   "author": "Greg Kubisa <gkubisa@gmail.com>",
   "license": "MIT",
