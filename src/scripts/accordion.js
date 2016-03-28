@@ -2,7 +2,9 @@
  * Watches the DOM and initializes Semantic UI Accordion module on newly added
  * nodes.
  */
-(function () {
+$(function () {
+  $('.ui.accordion').accordion()
+
   new MutationObserver(function (changes) {
     changes.forEach(function (change) {
       if (change.addedNodes.length > 0) {
@@ -13,4 +15,4 @@
     childList: true,
     subtree: true
   })
-}())
+})
