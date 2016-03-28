@@ -6,32 +6,39 @@ module ElmAppBoilerplate.Demo
   ) where
 {-| A demo module showcasing Semantic UI and Elm integration.-}
 
-import Html exposing (Html, text, h1, h2, h3, section, p, button, div, i)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
+import Html exposing (Html, text, h1, h2, h3, section, p, button, div, i, input,
+  label, Attribute)
+import Html.Attributes exposing (class, type', checked)
+import Html.Events exposing (onClick, on, targetChecked)
 import Effects exposing (Effects)
 import Signal
 
-type Action = ShowDemo | HideDemo
+type Action =
+    ShowDemo
+  | HideDemo
+  | CheckboxChanged Bool
 
 type alias Model =
   { heading: String
   , body: String
   , demoVisible: Bool
+  , checkboxChecked: Bool
   }
 
 init : String -> String -> (Model, Effects a)
 init heading body =
   noFx { heading = heading
     , body = body
-    , demoVisible = False
+    , demoVisible = True
+    , checkboxChecked = False
     }
 
 update : Action -> Model -> (Model, Effects a)
 update action model =
   case action of
-    ShowDemo -> noFx <| showDemo model
-    HideDemo -> noFx <| hideDemo model
+    ShowDemo -> noFx <| { model | demoVisible = True }
+    HideDemo -> noFx <| { model | demoVisible = False }
+    CheckboxChanged checked -> noFx <| { model | checkboxChecked = checked }
 
 view : Signal.Address Action -> Model -> Html
 view address model =
@@ -58,8 +65,12 @@ viewDemo address model =
     ]
       `List.append`
         if model.demoVisible
-          then [viewAccordionDemo address model]
-          else []
+          then
+            [ viewAccordionDemo address model
+            , viewCheckboxDemo address model
+            ]
+          else
+            []
 
 viewAccordionDemo : Signal.Address Action -> Model -> Html
 viewAccordionDemo address model =
@@ -104,17 +115,29 @@ viewAccordionDemo address model =
       ]
     ]
 
+viewCheckboxDemo : Signal.Address Action -> Model -> Html
+viewCheckboxDemo address model =
+  section []
+    [ h3 [] [ text "Checkbox demo" ]
+    , p []
+      [
+        div [ class "ui checkbox" ]
+          [ input
+              [ type' "checkbox"
+              , class "hidden"
+              , checked model.checkboxChecked
+              , onCheckedChange address CheckboxChanged
+              ]
+              []
+          , label [] [ text "Make my profile visible" ]
+          ]
+      ]
+    , p [] [ text << checkboxDescription <| model.checkboxChecked ]
+    ]
+
 noFx : Model -> (Model, Effects a)
 noFx model =
   (model, Effects.none)
-
-showDemo : Model -> Model
-showDemo model =
-  { model | demoVisible = True }
-
-hideDemo : Model -> Model
-hideDemo model =
-  { model | demoVisible = False }
 
 demoAction : Model -> Action
 demoAction model =
@@ -127,3 +150,17 @@ actionLabel action =
   case action of
     ShowDemo -> "Show Demo"
     HideDemo -> "Hide Demo"
+    CheckboxChanged checked -> "Checkbox Changed"
+
+checkboxDescription : Bool -> String
+checkboxDescription checked =
+  if checked
+    then "The checkbox is checked"
+    else "The checkbox is not checked"
+
+onCheckedChange : Signal.Address Action -> (Bool -> Action) -> Attribute
+onCheckedChange address contentToValue =
+    on
+      "change"
+      targetChecked
+      (\checked -> Signal.message address (contentToValue checked))
