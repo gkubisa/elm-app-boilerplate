@@ -25,6 +25,8 @@ npm run build
 
 The application code ready for deployment will be stored in `./dist`.
 
+**Even though the minified versions of all the necessary scripts and styles are produced, index.html always references the non-minified ones. Make sure you modify those references before creating the production build.**
+
 ## Testing
 
 Once off
@@ -71,4 +73,4 @@ The `modules` require some JavaScript to work and must be initialized by the app
 
 The `behaviors` would certainly be the most difficult to integrate, however, they are probably also the least likely to be useful to an Elm application. Specifically, the interaction with the backend (`API` behaviour) is better handled in Elm. `Form validation` could be useful, however, [Elm validation](https://github.com/etaque/elm-simple-form) is also available. The `visibility` behaviour is the one which cannot be easily done in Elm, so the integration might be worth the effort.
 
-`elm-app-boilerplate` is currently configured to include all Semantic UI components. Make sure you remove the unnecessary components before deploying your application to production.
+**`elm-app-boilerplate` is currently configured to include all Semantic UI components. Make sure you remove the unnecessary components before deploying your application to production.**
