@@ -58,3 +58,15 @@ npm run tdd
 - `src/theme.config` - defines which theme to use for each Semantic UI component
 - `src/semantic.less` and `src/theme.less` - other Semantic UI files
 - `tasks` and `gulpfile.js` - gulp scripts for building Semantic UI
+
+## Integration with Semantic UI
+
+Semantic UI provides a lot of ready-made, customizable UI components and helps to implement the design of the application quickly and consistently. It was included in `elm-app-boilerplate` because it integrates nicely with Elm.
+
+The main idea behind the integration is that Elm handles all the application logic, integration with the backend and rendering of the HTML. Semantic UI on the other hand is responsible for making the application look nice on the screen.
+
+Semantic UI `globals`, `views`, `collections` and `elements` are defined using LESS only, so they work seamlessly with Elm out of the box.
+
+The `modules` require some JavaScript to work and must be initialized by the application. However, some (if not all) `modules` can be automatically managed in JavaScript in a way that is completely transparent to the Elm code. The demo page of `elm-app-boilerplate` contains some examples of that technique. _Pull requests with examples for other `modules` welcome!_
+
+The `behaviors` would certainly be the most difficult to integrate, however, they are probably also the least likely to be useful to an Elm application. Specifically, the interaction with the backend (`API` behaviour) is better handled in Elm. `Form validation` could be useful, however, [Elm validation](https://github.com/etaque/elm-simple-form) is also available. The `visibility` behaviour is the one which cannot be easily done in Elm, so the integration might be worth the effort.
