@@ -1,6 +1,15 @@
 # Elm App Boilerplate
 
-Provides an efficient development workflow and is a good starting point for building Elm applications. It offers a head start on the UI implementation by integrating with the [Semantic UI](http://semantic-ui.com/) framework.
+Provides an efficient development workflow and a starting point for building Elm applications.
+
+## Features
+
+- easy to use npm scripts
+- automated build of all application resources
+- JavaScript and CSS minification
+- automatic rebuild and reload on source change
+- automatic re-execution of tests on source change
+- [Semantic UI](http://semantic-ui.com/) integration
 
 ## Getting Started
 
