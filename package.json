@@ -7,7 +7,7 @@
     "build": "npm run clean && npm run styles && npm run elm && npm run scripts && npm run website",
     "test": "elm-test test/TestRunner.elm",
     "tdd": "nodemon --watch './src/' --watch './test/' --ext elm --exec 'npm test'",
-    "clean": "rm -rf ./dist/ ./website/.cache",
+    "clean": "rm -rf dist website/.cache .semantic",
     "version": "json -4 -I -f elm-package.json -e \"this.version='${npm_package_version}'\" && git add elm-package.json",
     "postversion": "git push && git push origin v${npm_package_version}",
     "elm-repl": "elm repl",
@@ -26,7 +26,7 @@
     "postscripts": "uglifyjs ./dist/scripts.js --screw-ie8 --compress --mangle --output ./dist/scripts.min.js",
     "website": "cd website && rm -rf .cache && stack build && stack exec site build",
     "prebrowser-sync": "mkdir -p dist",
-    "browser-sync": "cd dist && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --reload-debounce 2500 --server --files '**/*, !components/**/*'"
+    "browser-sync": "cd dist && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --reload-debounce 2500 --server --files '**/*'"
   },
   "author": "Greg Kubisa <gkubisa@gmail.com>",
   "license": "MIT",
