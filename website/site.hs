@@ -2,11 +2,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import           Hakyll.Core.Configuration (defaultConfiguration)
 
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyll $ do
+main = hakyllWith hakyllConfiguration $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
@@ -65,3 +66,11 @@ postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+hakyllConfiguration :: Configuration
+hakyllConfiguration =
+    defaultConfiguration
+        { destinationDirectory = "../dist"
+        , storeDirectory = ".cache"
+        , tmpDirectory = ".cache/tmp"
+        }
