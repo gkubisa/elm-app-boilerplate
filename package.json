@@ -1,6 +1,6 @@
 {
   "name": "elm-app-boilerplate",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Elm application boilerplate",
   "scripts": {
     "start": "parallelshell 'npm run watch-styles' 'npm run watch-elm' 'npm run watch-scripts' 'npm run watch-html' 'npm run browser-sync'",
