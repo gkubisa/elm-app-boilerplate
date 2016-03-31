@@ -2,10 +2,10 @@
   "base": ".",
   "paths": {
     "source": {
-      "config": "src/theme.config",
-      "definitions": "src/definitions/",
-      "site": "src/site/",
-      "themes": "src/themes/"
+      "config": "styles/theme.config",
+      "definitions": "styles/definitions/",
+      "site": "styles/site/",
+      "themes": "styles/themes/"
     },
     "output": {
       "packaged": "dist/",
