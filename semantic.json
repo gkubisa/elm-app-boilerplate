@@ -9,8 +9,8 @@
     },
     "output": {
       "packaged": "dist/",
-      "uncompressed": "dist/components/",
-      "compressed": "dist/components/",
+      "uncompressed": ".semantic/",
+      "compressed": ".semantic/",
       "themes": "dist/themes/"
     },
     "clean": "dist/"

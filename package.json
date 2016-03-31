@@ -7,7 +7,7 @@
     "build": "npm run clean && npm run styles && npm run elm && npm run scripts && npm run html",
     "test": "elm-test test/TestRunner.elm",
     "tdd": "nodemon --watch './src/' --watch './test/' --ext elm --exec 'npm test'",
-    "clean": "rm -rf ./dist/",
+    "clean": "rm -rf dist .semantic",
     "version": "json -4 -I -f elm-package.json -e \"this.version='${npm_package_version}'\" && git add elm-package.json",
     "postversion": "git push && git push origin v${npm_package_version}",
     "elm-repl": "elm repl",
@@ -26,7 +26,7 @@
     "prehtml": "mkdir -p dist",
     "html": "rsync ./src/index.html ./dist/index.html",
     "prebrowser-sync": "mkdir -p dist",
-    "browser-sync": "cd dist && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --reload-debounce 2500 --server --files 'themes/**/*, *.js, *.css, *.html'"
+    "browser-sync": "cd dist && browser-sync start --no-ghost-mode --no-open --reload-delay 250 --reload-debounce 2500 --server --files '**/*'"
   },
   "author": "Greg Kubisa <gkubisa@gmail.com>",
   "license": "MIT",
