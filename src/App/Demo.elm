@@ -1,4 +1,4 @@
-module ElmAppBoilerplate.Demo
+module App.Demo
   ( init
   , update
   , view

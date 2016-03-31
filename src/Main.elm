@@ -4,7 +4,7 @@ import StartApp exposing (start)
 import Task exposing (Task)
 import Effects exposing (Effects)
 import Html
-import ElmAppBoilerplate.Demo as Demo
+import App.Demo as Demo
 
 app : StartApp.App Demo.Model
 app =
