@@ -34,8 +34,6 @@ npm run build
 
 The application code ready for deployment will be stored in `./dist`.
 
-**Even though the minified versions of all the necessary scripts and styles are produced, index.html always references the non-minified ones. Make sure you modify those references before creating the production build.**
-
 ## Testing
 
 Once off
@@ -50,13 +48,29 @@ Restart the tests on code change
 npm run tdd
 ```
 
+## Updating version
+
+Use the standard `npm version` command. This project contains npm scripts which also:
+
+- update the version in `elm-package.json`
+- push the branch on which the version change was made
+- push the created tag
+
+## Common Elm Commands
+
+- `elm make` - use `npm run build` instead
+- `elm reactor` - use `npm start` instead
+- `elm test` - use `npm test` or `npm run tdd` instead
+- `elm repl` - exposed through `npm run elm-repl`
+- `elm package` - exposed through `npm run elm-package`
+- `elm package install -y` - use `npm install` instead
+
 ## Directory Structure
 
 ### General
 
 - `package.json` - defines dependencies and scripts for building and running the application
 - `dist/` - built application artifacts, used by both `npm start` and `npm run build`
-- `src/index.html` - overall application entry point
 
 ### Elm
 
@@ -74,6 +88,16 @@ npm run tdd
 - `styles/` - the Semantic UI component definitions, themes, variables and style overrides
 - `gulpfile.js` - defines high level tasks for building Semantic UI
 - `tasks/` - gulp task definitions for building Semantic UI
+
+### JavaScript
+
+- `scripts/` - contains all application JavaScript code
+- `scripts/main.js` - entry point to the application JavaScript code
+
+### HTML
+
+- `html/index.html` - overall application entry point
+- `html-minifier.conf` - config file for the html-minifier module
 
 
 ## Integration with Semantic UI
