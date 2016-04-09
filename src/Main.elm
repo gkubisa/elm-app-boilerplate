@@ -9,10 +9,10 @@ import App.Demo as Demo
 app : StartApp.App Demo.Model
 app =
   start
-    { init = Demo.init "Welcome to Elm App Boilerplate" "Happy coding! :-)"
+    { init = Demo.init
     , view = Demo.view
     , update = Demo.update
-    , inputs = []
+    , inputs = [ Signal.map (always Demo.refresh) swap]
     }
 
 main : Signal Html.Html
@@ -22,3 +22,5 @@ main =
 port tasks : Signal (Task Effects.Never ())
 port tasks =
   app.tasks
+
+port swap : Signal.Signal Bool

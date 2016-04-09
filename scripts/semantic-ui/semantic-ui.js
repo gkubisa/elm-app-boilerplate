@@ -1,0 +1,6 @@
+window.jQuery = require('jquery')
+require('./globals/reset')
+require('./globals/site')
+require('./modules/accordion')
+require('./modules/checkbox')
+require('./elements/flag')

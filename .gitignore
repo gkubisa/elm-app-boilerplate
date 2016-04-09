@@ -1,5 +1,7 @@
 /elm-stuff/
 /node_modules/
 /dist/
-/.semantic/
-
+/styles/definitions/
+/styles/themes/
+/styles/theme.less
+/styles/semantic.less

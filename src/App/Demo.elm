@@ -1,6 +1,7 @@
 module App.Demo
   ( init
   , update
+  , refresh
   , view
   , Model
   ) where
@@ -14,7 +15,8 @@ import Effects exposing (Effects)
 import Signal
 
 type Action =
-    ShowDemo
+    NoOp
+  | ShowDemo
   | HideDemo
   | CheckboxChanged Bool
 
@@ -25,17 +27,22 @@ type alias Model =
   , checkboxChecked: Bool
   }
 
-init : String -> String -> (Model, Effects a)
-init heading body =
-  noFx { heading = heading
-    , body = body
+init : (Model, Effects a)
+init =
+  noFx
+    { heading = "Welcome to Elm App Boilerplate"
+    , body = "Happy coding! :-)"
     , demoVisible = True
     , checkboxChecked = False
     }
 
+refresh : Action
+refresh = NoOp
+
 update : Action -> Model -> (Model, Effects a)
 update action model =
   case action of
+    NoOp -> noFx <| model
     ShowDemo -> noFx <| { model | demoVisible = True }
     HideDemo -> noFx <| { model | demoVisible = False }
     CheckboxChanged checked -> noFx <| { model | checkboxChecked = checked }
@@ -68,6 +75,7 @@ viewDemo address model =
           then
             [ viewAccordionDemo address model
             , viewCheckboxDemo address model
+            , viewFlagDemo address model
             ]
           else
             []
@@ -135,6 +143,17 @@ viewCheckboxDemo address model =
     , p [] [ text << checkboxDescription <| model.checkboxChecked ]
     ]
 
+viewFlagDemo : Signal.Address Action -> Model -> Html
+viewFlagDemo address model =
+  section []
+    [ h3 [] [ text "Flags demo" ]
+    , p []
+        [ i [ class "ie flag" ] []
+        , i [ class "france flag" ] []
+        , i [ class "pl flag" ] []
+        ]
+    ]
+
 noFx : Model -> (Model, Effects a)
 noFx model =
   (model, Effects.none)
@@ -148,6 +167,7 @@ demoAction model =
 actionLabel : Action -> String
 actionLabel action =
   case action of
+    NoOp -> "NoOp"
     ShowDemo -> "Show Demo"
     HideDemo -> "Hide Demo"
     CheckboxChanged checked -> "Checkbox Changed"
