@@ -4,7 +4,7 @@
   "description": "Elm application boilerplate",
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
-    "build": "npm run clean && echo 'not implemented yet' && exit 1",
+    "build": "npm run clean && webpack -p",
     "test": "elm-test test/TestRunner.elm",
     "tdd": "nodemon --watch 'src/' --watch 'test/' --ext elm --exec 'npm test'",
     "clean": "rm -rf dist",
@@ -21,6 +21,7 @@
   "license": "MIT",
   "repository": "gkubisa/elm-app-boilerplate",
   "devDependencies": {
+    "autoprefixer": "^6.3.6",
     "css-loader": "^0.23.1",
     "elm": "^0.16.0",
     "elm-hot-loader": "^0.2.2",
@@ -33,12 +34,11 @@
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
     "nodemon": "^1.8.1",
-    "npm-run-all": "^1.7.0",
+    "postcss-loader": "^0.8.2",
     "semantic-ui-less": "^2.1.8",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1",
-    "webpack-merge": "^0.8.4"
+    "webpack-dev-server": "^1.14.1"
   }
 }

@@ -1,44 +1,47 @@
-const path = require('path')
-const merge = require('webpack-merge')
+const webpack = require('webpack')
+const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const START = process.env.npm_lifecycle_event === 'start'
+const BUILD = process.env.npm_lifecycle_event === 'build'
+
 const config = {
-  entry: path.resolve(__dirname, 'scripts/main.js' ),
+  entry: './scripts/main.js',
+
+  output: {
+    path: './dist',
+    filename: '[hash].js'
+  },
 
   resolve: {
     modulesDirectories: ['node_modules'],
-    extensions:         ['', '.js', '.elm']
+    extensions: ['', '.js', '.elm']
   },
 
   module: {
     noParse: /\.elm$/,
     loaders: [
-      { test: /\.less$/, loader: 'style!css!less' },
-      { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=8192' }
+      { test: /\.less$/, loader: 'style!css!postcss-loader!less' },
+      { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=8192' },
+      { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?warn&pathToMake=node_modules/.bin/elm-make' }
     ]
   },
 
   plugins: [
     new HtmlWebpackPlugin({
       template: 'html/index.html',
-      inject:   'body'
+      inject: 'body',
+      minify: require('./html-minifier.json')
     })
-  ]
+  ],
+
+  postcss: [ autoprefixer({ browsers: ['last 2 versions']} ) ]
 }
 
-if (process.env.npm_lifecycle_event === 'start') { // npm start
-  module.exports = merge(config, {
-    module: {
-      loaders: [ {
-        test:    /\.elm$/,
-        exclude: [/elm-stuff/, /node_modules/],
-        loader:  'elm-hot!elm-webpack'
-      } ]
-    }
-  })
-
-} else { // npm run build
-  module.exports = merge(config, {
-
-  })
+if (BUILD) {
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    compress: { warnings: false }
+  }))
 }
+
+module.exports = config
