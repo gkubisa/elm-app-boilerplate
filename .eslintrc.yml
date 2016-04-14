@@ -1,0 +1,31 @@
+root: true
+
+parser: 'babel-eslint'
+
+extends:
+  - 'eslint:recommended'
+
+env:
+  browser: true
+
+parserOptions:
+  ecmaFeatures:
+    arrowFunctions: true
+    binaryLiterals: true
+    blockBindings: true
+    defaultParams: true
+    destructuring: true
+    forOf: true
+    generators: true
+    modules: true
+    objectLiteralComputedProperties: true
+    objectLiteralDuplicateProperties: true
+    objectLiteralShorthandMethods: true
+    objectLiteralShorthandProperties: true
+    octalLiterals: true
+    regexUFlag: true
+    regexYFlag: true
+    restParams: true
+    spread: true
+    templateStrings: true
+    unicodeCodePointEscapes: true

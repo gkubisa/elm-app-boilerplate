@@ -1,3 +1,4 @@
+const path = require('path')
 const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -21,6 +22,9 @@ const config = {
 
   module: {
     noParse: /\.elm$/,
+    preLoaders: [
+      { test: /\.js$/, exclude: [path.resolve(__dirname, 'styles/'), /node_modules/], loader: 'eslint-loader' }
+    ],
     loaders: [
       { test: /\.js$/, exclude: [/node_modules/], loader: 'babel-loader?presets=es2015' },
       { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=8192' },
@@ -40,7 +44,12 @@ const config = {
     })
   ],
 
-  postcss: [ autoprefixer({ browsers: ['last 2 versions']} ) ]
+  postcss: [ autoprefixer({ browsers: ['last 2 versions']} ) ],
+
+  eslint: {
+    failOnWarning: true,
+    failOnError: true
+  }
 }
 
 if (START) {
