@@ -9,6 +9,7 @@ Provides an efficient development workflow and a starting point for building Elm
 - automatic re-execution of tests on source change
 - [Semantic UI](http://semantic-ui.com/) integration
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
+- JavaScript linted using [eslint](http://eslint.org/)
 
 ## Getting Started
 
