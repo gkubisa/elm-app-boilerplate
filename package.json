@@ -4,7 +4,7 @@
   "description": "Elm application boilerplate",
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
-    "build": "npm run clean && webpack -p",
+    "build": "npm run clean && webpack -p --bail",
     "test": "elm-test test/TestRunner.elm",
     "tdd": "nodemon --watch 'src/' --watch 'test/' --ext elm --exec 'npm test'",
     "clean": "rm -rf dist",
