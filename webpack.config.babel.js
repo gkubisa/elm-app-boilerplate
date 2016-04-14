@@ -1,8 +1,8 @@
-const path = require('path')
-const webpack = require('webpack')
-const autoprefixer = require('autoprefixer')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+import path from 'path'
+import webpack from 'webpack'
+import autoprefixer from 'autoprefixer'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
@@ -26,7 +26,7 @@ const config = {
       { test: /\.js$/, exclude: [path.resolve(__dirname, 'styles/'), /node_modules/], loader: 'eslint-loader' }
     ],
     loaders: [
-      { test: /\.js$/, exclude: [/node_modules/], loader: 'babel-loader?presets=es2015' },
+      { test: /\.js$/, exclude: [/node_modules/], loader: 'babel-loader' },
       { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=8192' },
       { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?warn&pathToMake=node_modules/.bin/elm-make' }
     ]
@@ -64,4 +64,4 @@ if (BUILD) {
   config.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false }}))
 }
 
-module.exports = config
+export default config
