@@ -4,11 +4,11 @@ Provides an efficient development workflow and a starting point for building Elm
 
 ## Features
 
-- easy to use npm scripts
 - automated build of all application resources using [webpack](http://webpack.github.io/)
 - Hot Module Replacement for the Elm code using [elm-hot-loader](https://github.com/fluxxu/elm-hot-loader)
 - automatic re-execution of tests on source change
 - [Semantic UI](http://semantic-ui.com/) integration
+- JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 
 ## Getting Started
 
