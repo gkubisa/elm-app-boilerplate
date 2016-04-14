@@ -1,1 +1,1 @@
-require('../../../styles/definitions/elements/flag.less')
+import '../../../styles/definitions/elements/flag.less'

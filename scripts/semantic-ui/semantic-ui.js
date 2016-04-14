@@ -1,6 +1,5 @@
-window.jQuery = require('jquery')
-require('./globals/reset')
-require('./globals/site')
-require('./modules/accordion')
-require('./modules/checkbox')
-require('./elements/flag')
+import './globals/reset'
+import './globals/site'
+import './modules/accordion'
+import './modules/checkbox'
+import './elements/flag'

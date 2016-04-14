@@ -1,2 +1,2 @@
-require('../../../styles/definitions/globals/site.less')
-require('../../../styles/definitions/globals/site')
+import '../../../styles/definitions/globals/site.less'
+import '../../../styles/definitions/globals/site'

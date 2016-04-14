@@ -1,1 +1,1 @@
-require('../../../styles/definitions/globals/reset.less')
+import '../../../styles/definitions/globals/reset.less'

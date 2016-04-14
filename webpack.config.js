@@ -22,6 +22,7 @@ const config = {
   module: {
     noParse: /\.elm$/,
     loaders: [
+      { test: /\.js$/, loader: 'babel-loader?presets=es2015' },
       { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=8192' },
       { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?warn&pathToMake=node_modules/.bin/elm-make' }
     ]
@@ -32,6 +33,10 @@ const config = {
       template: 'html/index.html',
       inject: 'body',
       minify: require('./html-minifier.json')
+    }),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
     })
   ],
 

@@ -1,16 +1,16 @@
-require('../../../styles/definitions/modules/accordion')
-require('../../../styles/definitions/modules/accordion.less')
-const $ = require('jquery')
+import '../../../styles/definitions/modules/accordion'
+import '../../../styles/definitions/modules/accordion.less'
+import $ from 'jquery'
 
 /**
  * Watches the DOM and initializes Semantic UI Accordion module on newly added
  * nodes.
  */
-$(function () {
+$(() => {
   $('.ui.accordion').accordion()
 
-  new MutationObserver(function (changes) {
-    changes.forEach(function (change) {
+  new MutationObserver(changes => {
+    changes.forEach(change => {
       if (change.addedNodes.length > 0) {
         $(change.addedNodes).find('.ui.accordion').accordion()
       }
