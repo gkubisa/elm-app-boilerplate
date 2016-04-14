@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
@@ -21,7 +22,6 @@ const config = {
   module: {
     noParse: /\.elm$/,
     loaders: [
-      { test: /\.less$/, loader: 'style!css!postcss-loader!less' },
       { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=8192' },
       { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?warn&pathToMake=node_modules/.bin/elm-make' }
     ]
@@ -38,10 +38,16 @@ const config = {
   postcss: [ autoprefixer({ browsers: ['last 2 versions']} ) ]
 }
 
+if (START) {
+  config.module.loaders.push({ test: /\.less$/, loader: 'style!css!postcss-loader!less' })
+}
 if (BUILD) {
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-    compress: { warnings: false }
-  }))
+  // put styles in a separate file
+  config.module.loaders.push({ test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css!postcss-loader!less') })
+  config.plugins.push(new ExtractTextPlugin('[hash].css'))
+
+  // disable UglifyJs warnings
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false }}))
 }
 
 module.exports = config

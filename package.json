@@ -27,6 +27,7 @@
     "elm-hot-loader": "^0.2.2",
     "elm-test": "^0.16.0",
     "elm-webpack-loader": "^2.0.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.15.0",
     "jquery": "^2.2.2",
