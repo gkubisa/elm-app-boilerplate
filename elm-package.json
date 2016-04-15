@@ -4,8 +4,8 @@
     "repository": "https://github.com/gkubisa/elm-app-boilerplate.git",
     "license": "MIT",
     "source-directories": [
-        "src",
-        "test"
+        "elm",
+        "elm-test"
     ],
     "exposed-modules": [],
     "dependencies": {

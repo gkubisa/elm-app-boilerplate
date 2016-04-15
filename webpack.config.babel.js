@@ -8,7 +8,7 @@ const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
 
 const config = {
-  entry: './scripts/main.js',
+  entry: './js/main.js',
 
   output: {
     path: './dist',

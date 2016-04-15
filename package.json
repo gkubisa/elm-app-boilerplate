@@ -5,8 +5,8 @@
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
     "build": "npm run clean && webpack -p --bail",
-    "test": "elm-test test/TestRunner.elm",
-    "tdd": "nodemon --watch 'src/' --watch 'test/' --ext elm --exec 'npm test'",
+    "test": "elm-test elm-test/TestRunner.elm",
+    "tdd": "nodemon --watch 'elm/' --watch 'elm-test/' --ext elm --exec 'npm test'",
     "clean": "rm -rf dist",
     "elm-repl": "elm repl",
     "elm-package": "elm package",
