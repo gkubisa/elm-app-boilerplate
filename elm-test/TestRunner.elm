@@ -3,11 +3,11 @@ module Main where
 import Signal exposing (Signal)
 import ElmTest exposing (consoleRunner)
 import Console exposing (IO, run)
-import Task
-import Tests
+import Task exposing (Task)
+import Tests exposing (testSuite)
 
 console : IO ()
-console = consoleRunner Tests.all
+console = consoleRunner testSuite
 
-port runner : Signal (Task.Task x ())
+port runner : Signal (Task x ())
 port runner = run console
