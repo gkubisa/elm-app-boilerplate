@@ -6,7 +6,7 @@ Provides an efficient development workflow and a starting point for building Elm
 
 - automated build of all application resources using [webpack](http://webpack.github.io/)
 - Hot Module Replacement for the Elm code using [elm-hot-loader](https://github.com/fluxxu/elm-hot-loader)
-- automatic re-execution of tests on source change
+- automatic re-execution of tests on source change for Elm and JavaScript code
 - [Semantic UI](http://semantic-ui.com/) integration
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
@@ -32,16 +32,20 @@ The application code ready for deployment will be stored in `./dist`.
 
 ## Testing
 
-Once off
+Run tests once off
 
 ```
-npm test
+npm test # Elm and JavaScript tests
+npm run test:elm # only Elm tests
+npm run test:js # only JavaScript tests
 ```
 
 Restart the tests on code change
 
 ```
-npm run tdd
+npm run tdd # Elm and JavaScript tests
+npm run tdd:elm # only Elm tests
+npm run tdd:js # only JavaScript tests
 ```
 
 ## Updating Version
@@ -68,18 +72,19 @@ The parameters to those commands must be specified after `--`, for example: `npm
 
 ### General
 
-- `package.json` - defines dependencies and scripts for building and running the application
+- `package.json` - defines dependencies and scripts for building, testing and running the application
 - `dist/` - built application artifacts produced by `npm run build`
+- `coverage/` - JavaScript test coverage reports
 
 ### Elm
 
 - `elm-package.json` - describes the Elm application and its dependencies
-- `src/` - Elm source files
-- `src/Main.elm` - Elm application entry point
-- `src/App/` - the namespace for all application Elm modules
-- `test/` - directory containing all the tests
-- `test/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
-- `test/Tests.elm` - the main file loading and exposing all the test suites
+- `elm/` - Elm source files
+- `elm/Main.elm` - Elm application entry point
+- `elm/App/` - the namespace for all application Elm modules
+- `elm-test/` - directory containing all Elm tests
+- `elm-test/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
+- `elm-test/Tests.elm` - the main file loading and exposing all the test suites
 
 ### Semantic UI
 
@@ -87,9 +92,7 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `styles/theme.config` - specifies which theme to use for each components
 - `styles/site/` - project-specific configuration and overrides
 
-#### Semantic UI (auto-generated)
-
-These files and  directories are copied from `semantic-ui-less` node module by the `postinstall` script.
+The following files and directories are copied from `semantic-ui-less` node module by the `postinstall` script and should not be modified manually.
 
 - `styles/definitions/` - Semantic UI component definitions
 - `styles/themes/` - Semantic UI themes
@@ -98,9 +101,11 @@ These files and  directories are copied from `semantic-ui-less` node module by t
 
 ### JavaScript
 
-- `scripts/` - contains all application JavaScript code
-- `scripts/main.js` - entry point to the application JavaScript code
-- `scripts/semantic-ui/` - scripts for Semantic UI integration
+- `js/` - contains all application JavaScript code
+- `js/main.js` - entry point to the application JavaScript code
+- `js/semantic-ui/` - scripts for Semantic UI integration
+- `js-test/` - directory containing all JavaScript tests
+- `js-test/test.js` - entry point for JavaScript tests - automatically loads all `*.test.js` files in `js-test`
 
 ### HTML
 
