@@ -6,7 +6,7 @@
     "start": "webpack-dev-server --hot --inline",
     "build": "npm run clean && webpack -p --bail",
     "test": "npm-run-all -p 'test:*'",
-    "test:elm": "elm-test elm-test/TestRunner.elm",
+    "test:elm": "elm-test elm-test/TestRunner.elm --compiler ./node_modules/.bin/elm-make",
     "test:js": "karma start --single-run",
     "tdd": "npm-run-all -p 'tdd:*'",
     "tdd:elm": "nodemon --watch 'elm/' --watch 'elm-test/' --ext elm --exec 'npm run test:elm'",
