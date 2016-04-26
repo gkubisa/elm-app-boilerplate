@@ -133,6 +133,6 @@ The application can be styled using the following techniques, in order of prefer
 1. Select suitable themes for the components by modifying `styles/theme.config`.
 2. Configure the Semantic UI variables in `styles/site/**/*.variables`.
 3. Add custom LESS code to modify some components in `styles/site/**/*.overrides`.
-4. Add any other custom LESS code to `styles/site/globals/site.overrides`.
+4. Add any other custom LESS code to `styles/site/globals/site.overrides`, or to custom `*.less` files it imports.
 
 Please refer to [Semantic UI](http://semantic-ui.com/) documentation for more details, including defining your own reusable themes.
