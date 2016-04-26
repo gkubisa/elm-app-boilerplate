@@ -7,6 +7,8 @@ Provides an efficient development workflow and a starting point for building Elm
 - automated build of all application resources using [webpack](http://webpack.github.io/)
 - Hot Module Replacement for the Elm code using [elm-hot-loader](https://github.com/fluxxu/elm-hot-loader)
 - automatic re-execution of tests on source change for Elm and JavaScript code
+- property based testing using [elm-check](https://github.com/NoRedInk/elm-check) for the Elm tests
+- test coverage using [istanbul](https://github.com/gotwarlost/istanbul) for the JavaScript tests
 - [Semantic UI](http://semantic-ui.com/) integration
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
