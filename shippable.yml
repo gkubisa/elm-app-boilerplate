@@ -1,0 +1,16 @@
+language: node_js
+
+node_js:
+  - "4"
+
+build:
+  ci:
+    - npm prune
+    - shippable_retry npm install
+    - npm test
+
+  cache: true
+  cache_dir_list:
+    - $SHIPPABLE_BUILD_DIR/node_modules
+    - $SHIPPABLE_BUILD_DIR/elm-stuff
+    - $SHIPPABLE_BUILD_DIR/.git
