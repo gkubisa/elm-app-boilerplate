@@ -6,7 +6,7 @@ node_js:
 build:
   ci:
     - npm prune
-    - shippable_retry npm install
+    - shippable_retry npm install --unsafe-perm
     - npm test
 
   cache: true
