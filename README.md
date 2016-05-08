@@ -1,5 +1,7 @@
 # Elm App Boilerplate
 
+[![Run Status](https://api.shippable.com/projects/572133332a8192902e1e2958/badge?branch=master)](https://app.shippable.com/projects/572133332a8192902e1e2958)
+
 Provides an efficient development workflow and a starting point for building Elm applications.
 
 ## Features
