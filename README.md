@@ -14,6 +14,7 @@ Provides an efficient development workflow and a starting point for building Elm
 - [Semantic UI](http://semantic-ui.com/) integration
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
+- building and running a [Docker](https://www.docker.com/) image
 
 ## Getting Started
 
@@ -28,11 +29,29 @@ Open `http://localhost:8080/` in a browser.
 
 ## Preparing for Deployment
 
+Building the application (build artifacts ready for deployment are stored in `./dist`).
+
 ```
 npm run build
 ```
 
-The application code ready for deployment will be stored in `./dist`.
+Creating a docker image containing a copy of the `./dist` directory and served by [nginx](https://www.nginx.com/) on port 80. Requires Docker version 1.11.1 or later.
+
+```
+npm run docker-build
+```
+
+Testing the created docker image.
+
+```
+npm run docker-run # creates and starts a Docker container
+# the app is now available at http://localhost:8081
+
+npm run docker-start # starts an existing container
+npm run docker-stop # stops an existing container
+npm run docker-rm # removes an existing, stopped container
+```
+
 
 ## Testing
 
