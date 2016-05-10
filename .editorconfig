@@ -10,7 +10,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{js,html,less,elm,md,conf}]
+[*.{js,html,less,elm,md,conf,yml}]
 indent_style = space
 indent_size = 2
 

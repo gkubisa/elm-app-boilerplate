@@ -15,6 +15,7 @@ Provides an efficient development workflow and a starting point for building Elm
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
 - building and running a [Docker](https://www.docker.com/) image
+- [Shippable](https://app.shippable.com/) integration
 
 ## Getting Started
 
@@ -27,7 +28,42 @@ npm start
 
 Open `http://localhost:8080/` in a browser.
 
-## Preparing for Deployment
+
+## Testing
+
+Run tests once off
+
+```
+npm test # Elm and JavaScript tests
+npm run test:elm # only Elm tests
+npm run test:js # only JavaScript tests
+```
+
+Restart the tests on code change
+
+```
+npm run tdd # Elm and JavaScript tests
+npm run tdd:elm # only Elm tests
+npm run tdd:js # only JavaScript tests
+```
+
+## Deployment
+
+The deployment is currently automated using Shippable up to the point of pushing a docker image to Docker Hub. I will implement deploying that image to a live server soon. Still, the deplyment steps will remain the same.
+
+1. Run `npm version [major|minor|patch]` on the `master` branch.
+2. Add release notes in GitHub.
+
+
+## Docker
+
+This section describes the Docker integration. These commands are used mostly by Shippable CI and deployment process.
+
+Building and pushing a docker image containing the app - a shorthand for `npm run build`, `npm run docker-build` and `npm run docker-push`. See below for more details.
+
+```
+npm run release
+```
 
 Building the application (build artifacts ready for deployment are stored in `./dist`).
 
@@ -52,24 +88,12 @@ npm run docker-stop # stops an existing container
 npm run docker-rm # removes an existing, stopped container
 ```
 
-
-## Testing
-
-Run tests once off
+Pushing the created docker image to Docker Hub.
 
 ```
-npm test # Elm and JavaScript tests
-npm run test:elm # only Elm tests
-npm run test:js # only JavaScript tests
+npm run docker-push
 ```
 
-Restart the tests on code change
-
-```
-npm run tdd # Elm and JavaScript tests
-npm run tdd:elm # only Elm tests
-npm run tdd:js # only JavaScript tests
-```
 
 ## Updating Version
 

@@ -9,8 +9,19 @@ build:
     - shippable_retry npm install --unsafe-perm
     - npm test
 
+  post_ci:
+    - if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then npm run release; fi
+
   cache: true
   cache_dir_list:
     - $SHIPPABLE_BUILD_DIR/node_modules
     - $SHIPPABLE_BUILD_DIR/elm-stuff
     - $SHIPPABLE_BUILD_DIR/.git
+
+integrations:
+  hub:
+    - integrationName: docker-hub
+      type: docker
+      branches:
+        only:
+          - master
