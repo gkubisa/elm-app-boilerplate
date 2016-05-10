@@ -1,6 +1,6 @@
 {
   "name": "elm-app-boilerplate",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Elm application boilerplate",
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
