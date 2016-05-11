@@ -22,6 +22,3 @@ integrations:
   hub:
     - integrationName: docker-hub
       type: docker
-      branches:
-        only:
-          - master
