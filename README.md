@@ -4,6 +4,7 @@
 
 Provides an efficient development workflow and a starting point for building Elm applications.
 
+
 ## Features
 
 - automated build of all application resources using [webpack](http://webpack.github.io/)
@@ -15,7 +16,8 @@ Provides an efficient development workflow and a starting point for building Elm
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
 - building and running a [Docker](https://www.docker.com/) image
-- [Shippable](https://app.shippable.com/) integration
+- continuous integration and deployment based on [Shippable](https://app.shippable.com/)
+
 
 ## Getting Started
 
@@ -31,7 +33,7 @@ Open `http://localhost:8080/` in a browser.
 
 ## Testing
 
-Run tests once off
+Run tests once off:
 
 ```
 npm test # Elm and JavaScript tests
@@ -39,7 +41,7 @@ npm run test:elm # only Elm tests
 npm run test:js # only JavaScript tests
 ```
 
-Restart the tests on code change
+Restart the tests on code change:
 
 ```
 npm run tdd # Elm and JavaScript tests
@@ -47,61 +49,29 @@ npm run tdd:elm # only Elm tests
 npm run tdd:js # only JavaScript tests
 ```
 
+
 ## Deployment
 
-The deployment is currently automated using Shippable up to the point of pushing a docker image to Docker Hub. I will implement deploying that image to a live server soon. Still, the deplyment steps will remain the same.
+The deployment is automated using Shippable and is triggered as follows:
 
 1. Run `npm version [major|minor|patch]` on the `master` branch.
 2. Add release notes in GitHub.
 
+### Custom Deployments
 
-## Docker
+Consider using `npm run release` as a base - it builds the app, creates a docker image, and then tags and pushes it to Docker Hub.
 
-This section describes the Docker integration. These commands are used mostly by Shippable CI and deployment process.
-
-Building and pushing a docker image containing the app - a shorthand for `npm run build`, `npm run docker-build` and `npm run docker-push`. See below for more details.
-
-```
-npm run release
-```
-
-Building the application (build artifacts ready for deployment are stored in `./dist`).
-
-```
-npm run build
-```
-
-Creating a docker image containing a copy of the `./dist` directory and served by [nginx](https://www.nginx.com/) on port 80. Requires Docker version 1.11.1 or later.
-
-```
-npm run docker-build
-```
-
-Testing the created docker image.
-
-```
-npm run docker-run # creates and starts a Docker container
-# the app is now available at http://localhost:8081
-
-npm run docker-start # starts an existing container
-npm run docker-stop # stops an existing container
-npm run docker-rm # removes an existing, stopped container
-```
-
-Pushing the created docker image to Docker Hub.
-
-```
-npm run docker-push
-```
+Alternatively use the output of the `npm run build` command which stores all the optimized application files in `./dist`.
 
 
 ## Updating Version
 
-Use the standard `npm version` command. This project contains npm scripts which also:
+This project customizes the standard `npm version` script to also:
 
 - update the version in `elm-package.json`
 - push the branch on which the version change was made
 - push the created tag
+
 
 ## Elm Commands
 
@@ -115,6 +85,7 @@ The following Elm commands are exposed through npm scripts:
 
 The parameters to those commands must be specified after `--`, for example: `npm run elm-package -- install evancz/elm-effects`. See [npm run-script](https://docs.npmjs.com/cli/run-script).
 
+
 ## Directory Structure
 
 ### General
@@ -122,6 +93,7 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `package.json` - defines dependencies and scripts for building, testing and running the application
 - `dist/` - built application artifacts produced by `npm run build`
 - `coverage/` - JavaScript test coverage reports
+- `shippable.yml` - configuration of the continuous integration and deployment process based on Shippable
 
 ### Elm
 
@@ -157,6 +129,39 @@ The following files and directories are copied from `semantic-ui-less` node modu
 ### HTML
 
 - `html/index.html` - overall application entry point
+
+### Docker
+
+- `Dockerfile` - instructions for building a docker image
+- `config` - configuration for the services embedded in the docker image
+
+
+## Docker
+
+This section describes the Docker-related commands which are used by the Shippable continuous integration and deployment process. Docker version 1.11.1 or later is required.
+
+Creating a docker image containing a copy of the `./dist` directory which is served by [nginx](https://www.nginx.com/) on port 80:
+
+```
+npm run docker-build
+```
+
+Pushing the created docker image to Docker Hub with the tag `latest`:
+
+```
+npm run docker-push
+```
+
+Testing the created docker image locally:
+
+```
+npm run docker-run # creates and starts a Docker container
+# the app is now available at http://localhost:8081
+
+npm run docker-start # starts an existing container
+npm run docker-stop # stops an existing container
+npm run docker-rm # removes an existing, stopped container
+```
 
 
 ## Semantic UI

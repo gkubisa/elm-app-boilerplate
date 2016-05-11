@@ -10,7 +10,7 @@ build:
     - npm test
 
   post_ci:
-    - if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then npm run release; fi
+    - if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then shippable_retry npm run release; fi
 
   cache: true
   cache_dir_list:
