@@ -25,6 +25,7 @@
     "elm-reactor": "elm reactor",
     "elm-make": "elm make",
     "elm-test": "elm test",
+    "preversion": "npm test",
     "version": "json -4 -I -f elm-package.json -e \"this.version='${npm_package_version}'\" && git add elm-package.json",
     "postversion": "git push && git push origin v${npm_package_version}",
     "postinstall": "rsync -r node_modules/semantic-ui-less/themes node_modules/semantic-ui-less/definitions node_modules/semantic-ui-less/theme.less node_modules/semantic-ui-less/semantic.less styles/ && find styles -type f -exec chmod -x {} \\; && elm package install -y"
