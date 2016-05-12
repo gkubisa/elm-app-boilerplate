@@ -68,6 +68,7 @@ Alternatively use the output of the `npm run build` command which stores all the
 
 This project customizes the standard `npm version` script to also:
 
+- execute all tests
 - update the version in `elm-package.json`
 - push the branch on which the version change was made
 - push the created tag
