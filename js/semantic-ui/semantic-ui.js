@@ -1,5 +1,0 @@
-import './globals/reset'
-import './globals/site'
-import './modules/accordion'
-import './modules/checkbox'
-import './elements/flag'
