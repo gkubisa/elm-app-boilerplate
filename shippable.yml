@@ -10,7 +10,22 @@ build:
     - npm test
 
   post_ci:
-    - if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then shippable_retry npm run release; fi
+    - >-
+       if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then
+       shippable_retry npm run release &&
+       git clone . /tmp/demo &&
+       cd /tmp/demo &&
+       git remote set-url origin git@github.com:${REPO_FULL_NAME}.git &&
+       git config user.email "gkubisa.ci@gmail.com" &&
+       git config user.name "gkubisa-ci" &&
+       git fetch &&
+       git checkout gh-pages &&
+       rm -r * &&
+       cp -r ${SHIPPABLE_BUILD_DIR}/dist/* . &&
+       git add -A . &&
+       git commit -m "Update demo for ${GIT_TAG_NAME} [skip ci]" &&
+       shippable_retry git push origin gh-pages;
+       fi
 
   cache: true
   cache_dir_list:
