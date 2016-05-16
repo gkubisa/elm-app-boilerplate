@@ -8,8 +8,8 @@ module App.Demo
 {-| A demo module showcasing Semantic UI and Elm integration.-}
 
 import Html exposing (Html, text, h1, h2, h3, section, p, button, div, i, input,
-  label, Attribute)
-import Html.Attributes exposing (class, type', checked)
+  a, label, Attribute)
+import Html.Attributes exposing (class, type', checked, href)
 import Html.Events exposing (onClick, on, targetChecked)
 import Effects exposing (Effects)
 import Signal
@@ -21,18 +21,14 @@ type Action =
   | CheckboxChanged Bool
 
 type alias Model =
-  { heading: String
-  , body: String
-  , demoVisible: Bool
+  { demoVisible: Bool
   , checkboxChecked: Bool
   }
 
 init : (Model, Effects a)
 init =
   noFx
-    { heading = "Welcome to Elm App Boilerplate"
-    , body = "Happy coding! :-)"
-    , demoVisible = True
+    { demoVisible = True
     , checkboxChecked = False
     }
 
@@ -50,8 +46,14 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
   section []
-    [ h1 [] [ text model.heading ]
-    , p [] [ text model.body ]
+    [ h1 [] [ text "Welcome to Elm App Boilerplate" ]
+    , p []
+        [ text "This is a demo page of "
+        , a [ href "https://github.com/gkubisa/elm-app-boilerplate" ]
+            [ text "elm-app-boilerplate" ]
+        , text ", which is auto-generated on each release."
+        ]
+    , p [] [ text "Happy coding! :-)" ]
     , viewDemo address model
     ]
 

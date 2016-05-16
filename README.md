@@ -57,7 +57,10 @@ The deployment is automated using Shippable and is triggered as follows:
 1. Run `npm version [major|minor|patch]` on the `master` branch.
 2. Add release notes in GitHub.
 
-On success, a new docker image is pushed to [elm-app-boilerplate on Docker Hub](https://hub.docker.com/r/gkubisa/elm-app-boilerplate/).
+On success:
+
+- a new docker image is pushed to [elm-app-boilerplate on Docker Hub](https://hub.docker.com/r/gkubisa/elm-app-boilerplate/)
+- the demo app is deployed to [elm-app-boilerplate GitHub Pages](http://gkubisa.github.io/elm-app-boilerplate/)
 
 ### Custom Deployments
 
