@@ -48,6 +48,10 @@ const config = {
   eslint: {
     failOnWarning: true,
     failOnError: true
+  },
+
+  devServer: {
+    stats: 'errors-only'
   }
 }
 

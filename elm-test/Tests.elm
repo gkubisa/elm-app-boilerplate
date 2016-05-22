@@ -1,4 +1,4 @@
-module Tests (testSuite) where
+module Tests exposing (testSuite)
 
 import ElmTest exposing (Test, suite)
 import String

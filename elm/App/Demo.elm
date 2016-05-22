@@ -1,22 +1,20 @@
-module App.Demo
+module App.Demo exposing
   ( init
   , update
-  , refresh
   , view
+  , subscriptions
   , Model
-  ) where
+  , Msg
+  )
 {-| A demo module showcasing Semantic UI and Elm integration.-}
 
 import Html exposing (Html, text, h1, h2, h3, section, p, button, div, i, input,
   a, label, Attribute)
 import Html.Attributes exposing (class, type', checked, href)
-import Html.Events exposing (onClick, on, targetChecked)
-import Effects exposing (Effects)
-import Signal
+import Html.Events exposing (onClick, onCheck, targetChecked)
 
-type Action =
-    NoOp
-  | ShowDemo
+type Msg =
+    ShowDemo
   | HideDemo
   | CheckboxChanged Bool
 
@@ -25,26 +23,25 @@ type alias Model =
   , checkboxChecked: Bool
   }
 
-init : (Model, Effects a)
+init : (Model, Cmd a)
 init =
   noFx
     { demoVisible = True
     , checkboxChecked = False
     }
 
-refresh : Action
-refresh = NoOp
-
-update : Action -> Model -> (Model, Effects a)
+update : Msg -> Model -> (Model, Cmd a)
 update action model =
   case action of
-    NoOp -> noFx <| model
     ShowDemo -> noFx <| { model | demoVisible = True }
     HideDemo -> noFx <| { model | demoVisible = False }
     CheckboxChanged checked -> noFx <| { model | checkboxChecked = checked }
 
-view : Signal.Address Action -> Model -> Html
-view address model =
+subscriptions : Model -> Sub Msg
+subscriptions = always Sub.none
+
+view : Model -> Html Msg
+view model =
   section []
     [ h1 [] [ text "Welcome to Elm App Boilerplate" ]
     , p []
@@ -54,11 +51,11 @@ view address model =
         , text ", which is auto-generated on each release."
         ]
     , p [] [ text "Happy coding! :-)" ]
-    , viewDemo address model
+    , viewDemo model
     ]
 
-viewDemo : Signal.Address Action -> Model -> Html
-viewDemo address model =
+viewDemo : Model -> Html Msg
+viewDemo model =
   section [] <|
     [ h2 []
         [ text "Semantic UI Demo" ]
@@ -68,22 +65,23 @@ viewDemo address model =
           dynamically added and removed by Elm."""
         ]
     , p []
-        [ button [ onClick address (demoAction model) ]
-          [ text << actionLabel << demoAction <| model ]
+        [ button
+            [ onClick << hideOrShowMsg <| model ]
+            [ text << actionLabel << hideOrShowMsg <| model ]
         ]
     ]
       `List.append`
         if model.demoVisible
           then
-            [ viewAccordionDemo address model
-            , viewCheckboxDemo address model
-            , viewFlagDemo address model
+            [ viewAccordionDemo model
+            , viewCheckboxDemo model
+            , viewFlagDemo model
             ]
           else
             []
 
-viewAccordionDemo : Signal.Address Action -> Model -> Html
-viewAccordionDemo address model =
+viewAccordionDemo : Model -> Html Msg
+viewAccordionDemo model =
   section []
     [ h3 [] [ text "Accordion Demo" ]
     , p [] [ text """This accordion is managed automatically in the JavaScript
@@ -125,8 +123,8 @@ viewAccordionDemo address model =
       ]
     ]
 
-viewCheckboxDemo : Signal.Address Action -> Model -> Html
-viewCheckboxDemo address model =
+viewCheckboxDemo : Model -> Html Msg
+viewCheckboxDemo model =
   section []
     [ h3 [] [ text "Checkbox demo" ]
     , p []
@@ -136,7 +134,7 @@ viewCheckboxDemo address model =
               [ type' "checkbox"
               , class "hidden"
               , checked model.checkboxChecked
-              , onCheckedChange address CheckboxChanged
+              , onCheck CheckboxChanged
               ]
               []
           , label [] [ text "Make my profile visible" ]
@@ -145,8 +143,8 @@ viewCheckboxDemo address model =
     , p [] [ text << checkboxDescription <| model.checkboxChecked ]
     ]
 
-viewFlagDemo : Signal.Address Action -> Model -> Html
-viewFlagDemo address model =
+viewFlagDemo : Model -> Html Msg
+viewFlagDemo model =
   section []
     [ h3 [] [ text "Flags demo" ]
     , p []
@@ -156,20 +154,19 @@ viewFlagDemo address model =
         ]
     ]
 
-noFx : Model -> (Model, Effects a)
+noFx : Model -> (Model, Cmd a)
 noFx model =
-  (model, Effects.none)
+  (model, Cmd.none)
 
-demoAction : Model -> Action
-demoAction model =
+hideOrShowMsg : Model -> Msg
+hideOrShowMsg model =
   if model.demoVisible
     then HideDemo
     else ShowDemo
 
-actionLabel : Action -> String
+actionLabel : Msg -> String
 actionLabel action =
   case action of
-    NoOp -> "NoOp"
     ShowDemo -> "Show Demo"
     HideDemo -> "Hide Demo"
     CheckboxChanged checked -> "Checkbox Changed"
@@ -179,10 +176,3 @@ checkboxDescription checked =
   if checked
     then "The checkbox is checked"
     else "The checkbox is not checked"
-
-onCheckedChange : Signal.Address Action -> (Bool -> Action) -> Attribute
-onCheckedChange address contentToValue =
-    on
-      "change"
-      targetChecked
-      (\checked -> Signal.message address (contentToValue checked))

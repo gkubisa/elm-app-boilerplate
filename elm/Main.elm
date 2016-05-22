@@ -1,26 +1,11 @@
-module Main where
-
-import StartApp exposing (start)
-import Task exposing (Task)
-import Effects exposing (Effects)
-import Html
+import Html.App
 import App.Demo as Demo
 
-app : StartApp.App Demo.Model
-app =
-  start
+main : Program Never
+main =
+  Html.App.program
     { init = Demo.init
     , view = Demo.view
     , update = Demo.update
-    , inputs = [ Signal.map (always Demo.refresh) swap]
+    , subscriptions = Demo.subscriptions
     }
-
-main : Signal Html.Html
-main =
-  app.html
-
-port tasks : Signal (Task Effects.Never ())
-port tasks =
-  app.tasks
-
-port swap : Signal.Signal Bool

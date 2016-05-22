@@ -17,6 +17,7 @@ Provides an efficient development workflow and a starting point for building Elm
 - JavaScript linted using [eslint](http://eslint.org/)
 - building and running a [Docker](https://www.docker.com/) image
 - continuous integration and deployment based on [Shippable](https://app.shippable.com/)
+- dependency checking using [npm-check-updates](https://github.com/tjunnone/npm-check-updates)
 
 
 ## Getting Started
@@ -73,21 +74,34 @@ Alternatively use the output of the `npm run build` command which stores all the
 
 This project customizes the standard `npm version` script to also:
 
+- ensure that the dependencies are up to date
 - execute all tests
 - update the version in `elm-package.json`
 - push the branch on which the version change was made
 - push the created tag
 
 
+## Updating Dependencies
+
+Dependeny check and update is handled by [ncu](https://github.com/tjunnone/npm-check-updates). A check runs automatically every time `npm version` is executed but can also be triggered explicitly.
+
+```
+npm run ncu # checks the dependencies in package.json
+npm run ncu -- -a # updates all dependencies in node_modules and package.json
+```
+
+Note: all `ncu` parameters and flags have to be specified after `--`.
+
+
 ## Elm Commands
 
 The following Elm commands are exposed through npm scripts:
 
+- `npm run elm`
 - `npm run elm-reactor`
 - `npm run elm-repl`
 - `npm run elm-package`
 - `npm run elm-make`
-- `npm run elm-test`
 
 The parameters to those commands must be specified after `--`, for example: `npm run elm-package -- install evancz/elm-effects`. See [npm run-script](https://docs.npmjs.com/cli/run-script).
 

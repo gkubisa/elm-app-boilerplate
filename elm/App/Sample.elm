@@ -1,7 +1,7 @@
-module App.Sample
+module App.Sample exposing
   ( sum
   , product
-  ) where
+  )
 
 sum : number -> number -> number
 sum a b =

@@ -1,6 +1,4 @@
-module App.SampleTest
-  ( testSuite
-  ) where
+module App.SampleTest exposing (testSuite)
 
 import App.Sample exposing (sum, product)
 import ElmTest exposing (Test, test, suite, assertEqual)
@@ -25,7 +23,7 @@ testSuite =
             `is` (\(a, b) -> a * b)
             `for` tuple (float, float)
         , claim "should be inverted by division with minimal imprecision"
-            `true` (\(a, b) -> abs (product a b / b - a) < 1e-10)
+            `true` (\(a, b) -> abs (product a b / b - a) < 1e-6)
             `for` (filter (\(a, b) -> b /= 0) (tuple (float, float)))
         ]
     ]
