@@ -19,7 +19,7 @@
     "docker-push": "docker push gkubisa/elm-app-boilerplate",
     "prerelease": "run-s build docker-build docker-push",
     "release": "docker tag gkubisa/elm-app-boilerplate gkubisa/elm-app-boilerplate:${npm_package_version} && docker push gkubisa/elm-app-boilerplate:${npm_package_version}",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist elm-stuff/build-artifacts",
     "elm": "elm",
     "elm-repl": "elm repl",
     "elm-package": "elm package",
