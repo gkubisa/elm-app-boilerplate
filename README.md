@@ -31,6 +31,11 @@ npm start
 
 Open `http://localhost:8080/` in a browser.
 
+For an alternative host or port run:
+
+```
+npm start -- --host=0.0.0.0 --port=8081
+```
 
 ## Testing
 
