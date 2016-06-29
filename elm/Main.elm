@@ -1,11 +1,15 @@
-import Html.App
-import App.Demo as Demo
+import Navigation
+import App.App as App
+
+{-| Entry point to the application.
+-}
 
 main : Program Never
 main =
-  Html.App.program
-    { init = Demo.init
-    , view = Demo.view
-    , update = Demo.update
-    , subscriptions = Demo.subscriptions
+  Navigation.program App.urlParser
+    { init = App.init
+    , view = App.view
+    , update = App.update
+    , urlUpdate = App.urlUpdate
+    , subscriptions = App.subscriptions
     }

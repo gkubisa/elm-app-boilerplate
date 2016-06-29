@@ -2,10 +2,12 @@ module Tests exposing (testSuite)
 
 import ElmTest exposing (Test, suite)
 import String
-import App.SampleTest
+import App.SampleTest as SampleTest
+import App.Widget.MenuTest as MenuTest
 
 testSuite : Test
 testSuite =
   suite "All tests"
-    [ App.SampleTest.testSuite
+    [ SampleTest.testSuite
+    , MenuTest.testSuite
     ]

@@ -1,0 +1,39 @@
+@import (multiple) '../../Config';
+
+@App-Widget-Menu-primaryColor: @primaryColor;
+@App-Widget-Menu-textColor: @textPrimaryColor;
+@App-Widget-Menu-activeColor: @darkPrimaryColor;
+
+
+.App-Widget-Menu {
+  background-color: @App-Widget-Menu-primaryColor;
+
+  ul {
+    display: none;
+  }
+
+  li {
+    &.active {
+      & > a,
+      & > button {
+        background-color: @App-Widget-Menu-activeColor;
+      }
+    }
+
+    &.expanded {
+      & > ul {
+        display: block;
+      }
+    }
+  }
+
+  a,
+  button {
+    background-color: transparent;
+    border: 0;
+    padding: 0.2em;
+    display: inline-block;
+    text-decoration: none;
+    color: @App-Widget-Menu-textColor;
+  }
+}

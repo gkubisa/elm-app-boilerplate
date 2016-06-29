@@ -12,7 +12,7 @@ const config = {
 
   output: {
     path: './dist',
-    filename: '[hash].js'
+    filename: '/[hash].js'
   },
 
   resolve: {
@@ -51,7 +51,8 @@ const config = {
   },
 
   devServer: {
-    stats: 'errors-only'
+    stats: 'errors-only',
+    historyApiFallback: true
   }
 }
 
