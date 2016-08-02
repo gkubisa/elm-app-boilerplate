@@ -70,6 +70,17 @@ update msg model =
       in
         ( { model | mainMenu = mainMenu }
         , mainMenuCmd)
+    DemoMsg demoMsg ->
+      case model.routeModel of
+        DemoModel demoModel ->
+          let
+            (demo, demoCmd) =
+              mapDemo <| Demo.update demoMsg demoModel
+          in
+            ( { model | routeModel = demo }
+            , demoCmd )
+        _ ->
+          (model, Cmd.none)
     _ ->
       (model, Cmd.none)
 
