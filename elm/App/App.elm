@@ -5,7 +5,7 @@ module App.App exposing
 -}
 
 import Html exposing
-  (div, header, footer, main', section, h1, h2, a, text, Html)
+  (div, header, footer, main', section, nav, h1, h2, a, text, Html)
 import Html.Attributes exposing (href)
 import Html.App
 import Navigation exposing (Location)
@@ -118,7 +118,8 @@ view model =
       [ header []
           [ h1 []
               [ text "elm-app-boilerplate" ]
-          , mainMenu
+          , nav []
+              [ mainMenu ]
           ]
       , main' []
           [ mainContent
