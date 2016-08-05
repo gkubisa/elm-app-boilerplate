@@ -27,7 +27,7 @@ const config = {
     loaders: [
       { test: /\.js$/, exclude: [/node_modules/], loader: 'babel-loader' },
       { test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?)$/, loader: 'url-loader?limit=8192' },
-      { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?warn&pathToMake=node_modules/.bin/elm-make' }
+      { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?verbose&warn&pathToMake=node_modules/.bin/elm-make' }
     ]
   },
 
