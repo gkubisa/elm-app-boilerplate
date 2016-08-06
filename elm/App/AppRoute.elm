@@ -1,16 +1,51 @@
 module App.AppRoute exposing
-  ( Route(..), toUrl, toString
+  ( Route(..), RoutingContext
+  , toUrl, toString, urlParser
   , newRoute, modifyRoute
   )
 
-import Navigation
+import Navigation exposing (Location)
+import UrlParser exposing (format, s, oneOf, (</>))
 import Erl
+import App.Demo.Demo as Demo
 import App.Demo.DemoRoute as DemoRoute
 
 type Route =
     HomeRoute
   | DemoRoute DemoRoute.Route
   | NotFoundRoute
+
+type alias RoutingContext =
+  { route: Route
+  , location: Location
+  }
+
+{-| A parser which turns `Location` into a `Route`.
+-}
+urlParser: Navigation.Parser RoutingContext
+urlParser =
+  Navigation.makeParser <| \location ->
+    let
+      route =
+        case UrlParser.parse identity pathnameParser location.pathname of
+          Ok route ->
+            route
+          Err _ ->
+            NotFoundRoute
+    in
+      { route = route
+      , location = location
+      }
+
+{-| A parser which turns `Location.pathname` into a `Route`.
+-}
+pathnameParser: UrlParser.Parser (Route -> a) a
+pathnameParser =
+  oneOf
+    [ format DemoRoute (s "" </> s "demo" </> Demo.pathnameParser)
+    , format HomeRoute (s "")
+    ]
+
 
 {-| Converts the specified `Route` to a `Url`
 -}

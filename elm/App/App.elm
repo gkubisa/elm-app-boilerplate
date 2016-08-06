@@ -1,5 +1,5 @@
 module App.App exposing
-  (init, update, urlUpdate, view, subscriptions, urlParser)
+  (init, update, urlUpdate, view, subscriptions)
 
 {-| The main application component. Handles the top level routing.
 -}
@@ -8,13 +8,11 @@ import Html exposing
   (div, header, footer, main', section, nav, h1, h2, a, text, Html)
 import Html.Attributes exposing (href)
 import Html.App
-import Navigation exposing (Location)
-import UrlParser exposing (format, s, oneOf, (</>))
 import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
 import App.NotFoundPage as NotFoundPage
 import App.Demo.Demo as Demo
-import App.AppRoute exposing (Route(..))
+import App.AppRoute exposing (Route(..), RoutingContext)
 import App.MainMenu as MainMenu
 
 type alias Model =
@@ -26,11 +24,6 @@ type RouteModel =
     HomeModel HomePage.Model
   | DemoModel Demo.Model
   | NotFoundModel NotFoundPage.Model
-
-type alias RoutingContext =
-  { route: Route
-  , location: Location
-  }
 
 type Msg =
     HomeMsg HomePage.Msg
@@ -144,32 +137,6 @@ view model =
 subscriptions: Model -> Sub Msg
 subscriptions model =
   Sub.none
-
-{-| A parser which turns `Location` into a `Route`.
--}
-urlParser: Navigation.Parser RoutingContext
-urlParser =
-  Navigation.makeParser <| \location ->
-    let
-      route =
-        case UrlParser.parse identity pathnameParser location.pathname of
-          Ok route ->
-            route
-          Err _ ->
-            NotFoundRoute
-    in
-      { route = route
-      , location = location
-      }
-
-{-| A parser which turns `Location.pathname` into a `Route`.
--}
-pathnameParser: UrlParser.Parser (Route -> a) a
-pathnameParser =
-  oneOf
-    [ format DemoRoute (s "" </> s "demo" </> Demo.pathnameParser)
-    , format HomeRoute (s "")
-    ]
 
 {-| Tags the Home model and command.
 -}
