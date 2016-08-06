@@ -7,7 +7,6 @@ module App.AppRoute exposing
 import Navigation exposing (Location)
 import UrlParser exposing (format, s, oneOf, (</>))
 import Erl
-import App.Demo.Demo as Demo
 import App.Demo.DemoRoute as DemoRoute
 
 type Route =
@@ -42,7 +41,7 @@ urlParser =
 pathnameParser: UrlParser.Parser (Route -> a) a
 pathnameParser =
   oneOf
-    [ format DemoRoute (s "" </> s "demo" </> Demo.pathnameParser)
+    [ format DemoRoute (s "" </> s "demo" </> DemoRoute.pathnameParser)
     , format HomeRoute (s "")
     ]
 

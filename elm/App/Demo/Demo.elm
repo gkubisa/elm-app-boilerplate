@@ -1,5 +1,5 @@
 module App.Demo.Demo exposing
-  ( init, update, urlUpdate, view, subscriptions, pathnameParser
+  ( init, update, urlUpdate, view, subscriptions
   , Model, Msg
   )
 
@@ -7,7 +7,6 @@ module App.Demo.Demo exposing
 -}
 
 import Html exposing (text, Html)
-import UrlParser exposing (format, s, oneOf, (</>))
 import App.Demo.DemoRoute exposing (Route(..))
 
 type alias Model =
@@ -49,12 +48,3 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
-
-pathnameParser: UrlParser.Parser (Route -> a) a
-pathnameParser =
-  oneOf
-    [ format AccordionDemoRoute (s "accordion")
-    , format CheckboxDemoRoute (s "checkbox")
-    , format OtherDemoRoute (s "other")
-    , format DemoRoute (s "")
-    ]
