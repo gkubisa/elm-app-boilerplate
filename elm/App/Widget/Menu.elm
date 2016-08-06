@@ -95,7 +95,7 @@ view model =
     activeRoute = model.activeRoute
 
     menuView (Menu menuItems) =
-      menuItemsView [ class "App-Widget-Menu" ] menuItems
+      menuItemsView [ class "Menu" ] menuItems
 
     menuItemsView attributes menuItems =
       ul attributes <| List.map menuItemView menuItems
