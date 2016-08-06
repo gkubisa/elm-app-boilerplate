@@ -7,7 +7,6 @@ module App.Demo.Demo exposing
 -}
 
 import Html exposing (text, Html)
-import Navigation
 import UrlParser exposing (format, s, oneOf, (</>))
 import App.Demo.DemoRoute exposing (Route(..))
 

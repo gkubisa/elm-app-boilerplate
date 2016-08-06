@@ -173,20 +173,24 @@ pathnameParser =
 
 {-| Tags the Home model and command.
 -}
+mapHome: (HomePage.Model, Cmd HomePage.Msg) -> (RouteModel, Cmd Msg)
 mapHome =
   mapEach HomeModel (Cmd.map HomeMsg)
 
 {-| Tags the Demo model and command.
 -}
+mapDemo: (Demo.Model, Cmd Demo.Msg) -> (RouteModel, Cmd Msg)
 mapDemo =
   mapEach DemoModel (Cmd.map DemoMsg)
 
 {-| Tags the NotFound model and command.
 -}
+mapNotFound: (NotFoundPage.Model, Cmd NotFoundPage.Msg) -> (RouteModel, Cmd Msg)
 mapNotFound =
   mapEach NotFoundModel (Cmd.map NotFoundMsg)
 
 {-| Tags the MainMenu command.
 -}
+mapMainMenu: (a, Cmd MainMenu.Msg) -> (a, Cmd Msg)
 mapMainMenu =
   mapSnd (Cmd.map MainMenuMsg)
