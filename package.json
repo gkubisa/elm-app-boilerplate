@@ -67,6 +67,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "mocha": "^3.0.0",
+    "node-elm-compiler": "gkubisa/node-elm-compiler#8098094ab3ddcbcdbcbceaeb33bd1b1d620eb5f2",
     "nodemon": "^1.10.0",
     "normalize.css": "^4.2.0",
     "npm-check-updates": "^2.8.0",
