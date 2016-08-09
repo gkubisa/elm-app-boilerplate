@@ -1,6 +1,6 @@
 module App.Demo.DemoRoute exposing
   ( Route(..)
-  , toUrl, pathnameParser
+  , pathnameParser, toPathnameFragment
   )
 
 import UrlParser exposing (format, s, oneOf, (</>))
@@ -21,9 +21,14 @@ pathnameParser =
     , format DemoRoute (s "")
     ]
 
-{-| Converts the specified `Route` to a `Url`
--}
-toUrl: Route -> Erl.Url
-toUrl route =
-  -- TODO implement it properly
-  Erl.new
+toPathnameFragment: Route -> String
+toPathnameFragment route =
+  case route of
+    DemoRoute ->
+      ""
+    AccordionDemoRoute ->
+      "accordion"
+    CheckboxDemoRoute ->
+      "checkbox"
+    OtherDemoRoute ->
+      "other"

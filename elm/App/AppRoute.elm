@@ -1,6 +1,8 @@
 module App.AppRoute exposing
   ( Route(..), RoutingContext
-  , toUrl, toString, urlParser
+  , pathnameParser, toPathnameFragment
+  , urlParser
+  , toUrl, toString
   , newRoute, modifyRoute
   )
 
@@ -19,6 +21,25 @@ type alias RoutingContext =
   , location: Location
   }
 
+{-| A parser which turns `Location.pathname` into a `Route`.
+-}
+pathnameParser: UrlParser.Parser (Route -> a) a
+pathnameParser =
+  oneOf
+    [ format DemoRoute (s "" </> s "demo" </> DemoRoute.pathnameParser)
+    , format HomeRoute (s "")
+    ]
+
+toPathnameFragment: Route -> String
+toPathnameFragment route =
+  case route of
+    HomeRoute ->
+      "/"
+    DemoRoute _ ->
+      "/demo/"
+    NotFoundRoute ->
+      ""
+
 {-| A parser which turns `Location` into a `Route`.
 -}
 urlParser: Navigation.Parser RoutingContext
@@ -36,35 +57,20 @@ urlParser =
       , location = location
       }
 
-{-| A parser which turns `Location.pathname` into a `Route`.
--}
-pathnameParser: UrlParser.Parser (Route -> a) a
-pathnameParser =
-  oneOf
-    [ format DemoRoute (s "" </> s "demo" </> DemoRoute.pathnameParser)
-    , format HomeRoute (s "")
-    ]
-
-
 {-| Converts the specified `Route` to a `Url`
 -}
 toUrl: Route -> Erl.Url
 toUrl route =
-  case route of
-    HomeRoute ->
-      Erl.parse "/"
-    DemoRoute demoRoute ->
-      case demoRoute of
-        DemoRoute.DemoRoute ->
-          Erl.parse "/demo/"
-        DemoRoute.AccordionDemoRoute ->
-          Erl.parse "/demo/accordion"
-        DemoRoute.CheckboxDemoRoute ->
-          Erl.parse "/demo/checkbox"
-        DemoRoute.OtherDemoRoute ->
-          Erl.parse "/demo/other"
-    NotFoundRoute ->
-      Erl.new
+  let
+    basePath = toPathnameFragment route
+    fullPath =
+      case route of
+        DemoRoute demoRoute ->
+          basePath ++ DemoRoute.toPathnameFragment demoRoute
+        _ ->
+          basePath
+  in
+    Erl.parse fullPath
 
 {-| Converts the specified `Route` to a URL represented as a `String`.
 -}
