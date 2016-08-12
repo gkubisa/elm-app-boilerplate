@@ -4,10 +4,14 @@ module App.AppRoute exposing
   , urlParser
   , toUrl, toString
   , newRoute, modifyRoute
+  , onNavigate
   )
 
 import Navigation exposing (Location)
 import UrlParser exposing (format, s, oneOf, (</>))
+import Html exposing (Attribute)
+import Html.Events exposing (onWithOptions, defaultOptions)
+import Json.Decode as JD
 import Erl
 import App.Demo.DemoRoute as DemoRoute
 
@@ -91,3 +95,39 @@ history.
 modifyRoute: Route -> Cmd msg
 modifyRoute =
   Navigation.modifyUrl << toString
+
+{-| Emits a custom message for navigation within the specified `origin`,
+triggered by activating an anchor tag.
+-}
+onNavigate: String -> (String -> msg) -> Attribute msg
+onNavigate origin tagger =
+  let
+    options = { defaultOptions | preventDefault = True }
+
+    nodeNameDecoder = JD.at [ "target", "nodeName" ] JD.string
+    hrefDecoder = JD.at [ "target", "href" ] JD.string
+    eventDecoder = JD.object2 (,) nodeNameDecoder hrefDecoder
+
+    decoder = JD.customDecoder eventDecoder (\(nodeName, href) ->
+      if nodeName /= "A" then
+        Err "Expected `target.nodeName` to equal \"A\""
+      else if href == "" then
+        Err "Expected `target.href` to be non-empty"
+      else if origin /= extractOrigin href then
+        Err <| "Expected `target.href`'s origin to equal \"" ++ origin ++ "\""
+      else
+        Ok (tagger href)
+    )
+  in
+    onWithOptions "click" options decoder
+
+{-| Extracts the origin from the specified URL.
+-}
+extractOrigin: String -> String
+extractOrigin url =
+  let
+    protocol = Erl.extractProtocol url
+    host = Erl.extractHost url
+    port' = Erl.extractPort url
+  in
+    protocol ++ "://" ++ host ++ ":" ++ (Basics.toString port')

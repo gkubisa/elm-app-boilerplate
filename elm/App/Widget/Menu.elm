@@ -8,11 +8,11 @@ module App.Widget.Menu exposing
 
 import Html exposing (ul, li, text, a, button, Html)
 import Html.Attributes exposing (href, tabindex, class, classList)
-import Erl
+import Html.Events exposing (onClick)
 import App.AppRoute as AppRoute exposing (Route, newRoute)
-import App.Util.Html.Events exposing (onClick)
 
 type alias Label = String
+type alias Url = String
 
 type MenuItem =
     InternalLink
@@ -21,7 +21,7 @@ type MenuItem =
       }
   | ExternalLink
       { label: Label
-      , url: Erl.Url
+      , url: Url
       }
   | ParentItem
       { label: Label
@@ -109,14 +109,12 @@ view model =
               ]
           in
             li [ classAttribute ]
-              [ a [ href (AppRoute.toString route)
-                  , onClick (ActivateMenuItem menuItem)
-                  ]
+              [ a [ href (AppRoute.toString route) ]
                   [ text label ]
               ]
         ExternalLink { label, url } ->
           li []
-            [ a [ href (Erl.toString url) ]
+            [ a [ href url ]
                 [ text label ]
             ]
         ParentItem { label, menuItems } ->
@@ -150,7 +148,7 @@ createInternalLink label route =
     , route = route
     }
 
-createExternalLink: Label -> Erl.Url -> MenuItem
+createExternalLink: Label -> Url -> MenuItem
 createExternalLink label url =
   ExternalLink
     { label = label

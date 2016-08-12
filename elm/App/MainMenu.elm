@@ -2,7 +2,6 @@ module App.MainMenu exposing
   ( init, update, urlUpdate, view
   , Model, Msg )
 
-import Erl
 import Html exposing (Html)
 import App.AppRoute as AppRoute exposing (Route)
 import App.Demo.DemoRoute as DemoRoute
@@ -32,9 +31,9 @@ init route =
                 ]
             , createParentItem "Resources"
                 [ createExternalLink "elm-app-boilerplate on GitHub"
-                    (Erl.parse "https://github.com/gkubisa/elm-app-boilerplate")
+                    "https://github.com/gkubisa/elm-app-boilerplate"
                 , createExternalLink "Elm Lang Website"
-                    (Erl.parse "http://elm-lang.org")
+                    "http://elm-lang.org"
                 ]
             ]
         ]

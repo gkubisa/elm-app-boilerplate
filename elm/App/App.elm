@@ -8,16 +8,18 @@ import Html exposing
   (div, header, footer, main', section, nav, h1, h2, a, text, Html)
 import Html.Attributes exposing (href)
 import Html.App
+import Navigation exposing (Location, newUrl)
 import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
 import App.NotFoundPage as NotFoundPage
 import App.Demo.Demo as Demo
-import App.AppRoute exposing (Route(..), RoutingContext)
+import App.AppRoute exposing (Route(..), RoutingContext, onNavigate)
 import App.MainMenu as MainMenu
 
 type alias Model =
   { routeModel: RouteModel
   , mainMenu: MainMenu.Model
+  , location: Location
   }
 
 type RouteModel =
@@ -30,6 +32,7 @@ type Msg =
   | DemoMsg Demo.Msg
   | NotFoundMsg NotFoundPage.Msg
   | MainMenuMsg MainMenu.Msg
+  | Navigate String
 
 init: RoutingContext -> (Model, Cmd Msg)
 init routingContext =
@@ -47,6 +50,7 @@ init routingContext =
     model =
       { routeModel = routeModel
       , mainMenu = menuModel
+      , location = routingContext.location
       }
 
     cmd = Cmd.batch [ routeCmd, menuCmd ]
@@ -56,6 +60,8 @@ init routingContext =
 update: Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
+    Navigate href ->
+      (model, newUrl href)
     MainMenuMsg mainMenuMsg ->
       let
         (mainMenu, mainMenuCmd) =
@@ -98,6 +104,7 @@ urlUpdate routingContext model =
     ( { model
       | routeModel = routeModel
       , mainMenu = mainMenu
+      , location = routingContext.location
       }
     , Cmd.batch [routeCmd, menuCmd]
     )
@@ -118,7 +125,7 @@ view model =
         NotFoundModel notFoundModel ->
           Html.App.map NotFoundMsg <| NotFoundPage.view notFoundModel
   in
-    div []
+    div [ onNavigate model.location.origin Navigate ]
       [ header []
           [ h1 []
               [ text "elm-app-boilerplate" ]
