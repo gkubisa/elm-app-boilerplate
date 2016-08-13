@@ -4,7 +4,6 @@ module App.Demo.DemoRoute exposing
   )
 
 import UrlParser exposing (format, s, oneOf, (</>))
-import Erl
 
 type Route =
     DemoRoute
