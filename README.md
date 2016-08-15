@@ -10,7 +10,6 @@ Provides an efficient development workflow and a starting point for building Elm
 - automated build of all application resources using [webpack](http://webpack.github.io/)
 - Hot Module Replacement for the Elm code using [elm-hot-loader](https://github.com/fluxxu/elm-hot-loader)
 - automatic re-execution of tests on source change for Elm and JavaScript code
-- property based testing using [elm-check](https://github.com/NoRedInk/elm-check) for the Elm tests
 - test coverage using [istanbul](https://github.com/gotwarlost/istanbul) for the JavaScript tests
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
@@ -101,6 +100,7 @@ The following Elm commands are exposed through npm scripts:
 - `npm run elm-repl`
 - `npm run elm-package`
 - `npm run elm-make`
+- `npm run elm-test`
 
 The parameters to those commands must be specified after `--`, for example: `npm run elm-package -- install evancz/elm-effects`. See [npm run-script](https://docs.npmjs.com/cli/run-script).
 

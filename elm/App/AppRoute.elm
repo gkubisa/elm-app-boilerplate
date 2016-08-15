@@ -5,6 +5,7 @@ module App.AppRoute exposing
   , toUrl, toString
   , newRoute, modifyRoute
   , onNavigate
+  , extractOrigin
   )
 
 import Navigation exposing (Location)

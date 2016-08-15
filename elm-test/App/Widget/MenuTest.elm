@@ -1,12 +1,9 @@
 module App.Widget.MenuTest exposing (testSuite)
 
-import Erl
-import App.Widget.Menu as Menu
-import App.AppRoute as AppRoute exposing (Route(..))
-import ElmTest exposing (Test, test, suite, assertEqual)
+import Test exposing (Test, describe)
 
-testSuite : Test
+testSuite: Test
 testSuite =
-  suite "App.Widget.Menu"
+  describe "App.Widget.Menu"
     [ -- TODO add some tests
     ]
