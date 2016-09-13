@@ -4,7 +4,7 @@ import Json.Encode exposing (Value)
 import Test.Runner.Node exposing (run)
 import Tests
 
-main: Program Never
+main: Program Value
 main =
   run emit Tests.testSuite
 
