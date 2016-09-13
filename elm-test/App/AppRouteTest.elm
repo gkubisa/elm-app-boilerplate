@@ -20,9 +20,7 @@ testSuite =
               , "http://example.com/some/path"
               )
             , ( "works for https with no port"
-              -- TODO port should be 443, waiting for https://github.com/sporto/erl/pull/13
-              -- , "https://example.com:443"
-              , "https://example.com:80"
+              , "https://example.com:443"
               , "https://example.com/some/path"
               )
             , ( "works for http with a custom port"

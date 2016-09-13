@@ -18,7 +18,7 @@
         "evancz/elm-http": "3.0.1 <= v < 4.0.0",
         "evancz/url-parser": "1.0.0 <= v < 2.0.0",
         "mgold/elm-random-pcg": "3.0.0 <= v < 4.0.0",
-        "sporto/erl": "10.0.0 <= v < 11.0.0"
+        "sporto/erl": "10.0.1 <= v < 11.0.0"
     },
     "elm-version": "0.17.0 <= v < 0.18.0"
 }
