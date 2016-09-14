@@ -1,5 +1,3 @@
--- TODO use lazy
-
 module App.Widget.Menu exposing
   ( init, update, urlUpdate, view
   , Model, Msg

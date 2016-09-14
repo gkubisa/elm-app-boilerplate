@@ -8,6 +8,7 @@ import Html exposing
   (div, header, footer, main', section, nav, h1, h2, a, text, Html)
 import Html.Attributes exposing (href)
 import Html.App
+import Html.Lazy exposing (lazy)
 import Navigation exposing (Location, newUrl)
 import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
@@ -114,16 +115,16 @@ view: Model -> Html Msg
 view model =
   let
     mainMenu =
-      Html.App.map MainMenuMsg <| MainMenu.view model.mainMenu
+      Html.App.map MainMenuMsg <| lazy MainMenu.view model.mainMenu
 
     mainContent =
       case model.routeModel of
         HomeModel homeModel ->
-          Html.App.map HomeMsg <| HomePage.view homeModel
+          Html.App.map HomeMsg <| lazy HomePage.view homeModel
         DemoModel demoModel ->
-          Html.App.map DemoMsg <| Demo.view demoModel
+          Html.App.map DemoMsg <| lazy Demo.view demoModel
         NotFoundModel notFoundModel ->
-          Html.App.map NotFoundMsg <| NotFoundPage.view notFoundModel
+          Html.App.map NotFoundMsg <| lazy NotFoundPage.view notFoundModel
   in
     div [ onNavigate model.location.origin Navigate ]
       [ header []
