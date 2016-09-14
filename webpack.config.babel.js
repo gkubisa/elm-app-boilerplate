@@ -7,6 +7,9 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
 
+const elmDir = path.resolve(__dirname, 'elm') + '/'
+const jsDir = path.resolve(__dirname, 'js') + '/'
+
 const config = {
   entry: './js/main.js',
 
@@ -22,12 +25,12 @@ const config = {
   module: {
     noParse: /\.elm$/,
     preLoaders: [
-      { test: /\.js$/, exclude: [path.resolve(__dirname, 'styles/'), /node_modules/], loader: 'eslint-loader' }
+      { test: /\.js$/, include: [jsDir], loader: 'eslint-loader' }
     ],
     loaders: [
-      { test: /\.js$/, exclude: [/node_modules/], loader: 'babel-loader' },
+      { test: /\.js$/, include: [jsDir], loader: 'babel-loader' },
       { test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?)$/, loader: 'url-loader?limit=8192' },
-      { test: /\.elm$/, exclude: [/elm-stuff/, /node_modules/], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?verbose&warn&pathToMake=node_modules/.bin/elm-make' }
+      { test: /\.elm$/, include: [elmDir], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?verbose&warn&pathToMake=node_modules/.bin/elm-make' }
     ]
   },
 
