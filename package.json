@@ -35,6 +35,9 @@
   "author": "Greg Kubisa <gkubisa@gmail.com>",
   "license": "MIT",
   "repository": "gkubisa/elm-app-boilerplate",
+  "engines": {
+    "node": ">= 6.0"
+  },
   "devDependencies": {
     "autoprefixer": "^6.4.1",
     "babel-core": "^6.14.0",
