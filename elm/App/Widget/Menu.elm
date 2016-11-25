@@ -7,7 +7,6 @@ module App.Widget.Menu exposing
 import Html exposing (ul, li, text, a, button, Html)
 import Html.Attributes exposing (href, tabindex, class, classList)
 import Html.Events exposing (onClick)
-import App.AppRoute as AppRoute exposing (Route, newRoute)
 
 type alias Label = String
 type alias Url = String
@@ -15,7 +14,7 @@ type alias Url = String
 type MenuItem =
     InternalLink
       { label: Label
-      , route: Route
+      , url: Url
       }
   | ExternalLink
       { label: Label
@@ -32,17 +31,17 @@ type Menu =
 type alias Model =
   { menu: Menu
   , expandedParentItem: Maybe MenuItem
-  , activeRoute: Route
+  , activeUrl: Url
   }
 
 type Msg =
     ActivateMenuItem MenuItem
 
-init: Route -> Menu -> (Model, Cmd Msg)
-init activeRoute menu =
+init: Url -> Menu -> (Model, Cmd Msg)
+init activeUrl menu =
   ( { menu = menu
     , expandedParentItem = Nothing
-    , activeRoute = activeRoute
+    , activeUrl = activeUrl
     }
   , Cmd.none
   )
@@ -56,9 +55,6 @@ update msg model =
     case msg of
       ActivateMenuItem activatedItem ->
         case activatedItem of
-          InternalLink { route } ->
-            -- navigate to the InternalLink
-            (model, newRoute route)
           ParentItem _ ->
             if isJustMember maybeExpandedItem [activatedItem]
               then
@@ -73,14 +69,14 @@ update msg model =
                   | expandedParentItem = Just activatedItem
                   }
                 , Cmd.none)
-          ExternalLink _ ->
-            -- let the browser handle activation of the `ExternalLink`
+          _ ->
+            -- let the browser handle activation of the `NavigationLink`
             (model, Cmd.none)
 
-urlUpdate: Route -> Model -> (Model, Cmd Msg)
-urlUpdate route model =
+urlUpdate: Url -> Model -> (Model, Cmd Msg)
+urlUpdate url model =
   ( { model
-    | activeRoute = route
+    | activeUrl = url
     }
   , Cmd.none
   )
@@ -90,7 +86,7 @@ view model =
   let
     menu = model.menu
     maybeExpandedItem = model.expandedParentItem
-    activeRoute = model.activeRoute
+    activeUrl = model.activeUrl
 
     menuView (Menu menuItems) =
       menuItemsView [ class "Menu" ] menuItems
@@ -100,14 +96,14 @@ view model =
 
     menuItemView menuItem =
       case menuItem of
-        InternalLink { label, route } ->
+        InternalLink { label, url } ->
           let
             classAttribute = classList
-              [ ("active", isActive activeRoute menuItem)
+              [ ("active", isActive activeUrl menuItem)
               ]
           in
             li [ classAttribute ]
-              [ a [ href (AppRoute.toString route) ]
+              [ a [ href (url) ]
                   [ text label ]
               ]
         ExternalLink { label, url } ->
@@ -119,7 +115,7 @@ view model =
           let
             classListAttribute = classList
               [ ("expanded", isJustMember maybeExpandedItem [menuItem])
-              , ("active", isActive activeRoute menuItem)
+              , ("active", isActive activeUrl menuItem)
               ]
           in
             li [ classListAttribute ]
@@ -139,11 +135,11 @@ getItems: Menu -> List MenuItem
 getItems (Menu menuItems) =
   menuItems
 
-createInternalLink: Label -> Route -> MenuItem
-createInternalLink label route =
+createInternalLink: Label -> Url -> MenuItem
+createInternalLink label url =
   InternalLink
     { label = label
-    , route = route
+    , url = url
     }
 
 createExternalLink: Label -> Url -> MenuItem
@@ -228,12 +224,12 @@ findParent childItem =
 
 {-| Determines, if the specified menu item is active.
 -}
-isActive: Route -> MenuItem -> Bool
-isActive activeRoute checkedItem =
+isActive: Url -> MenuItem -> Bool
+isActive activeUrl checkedItem =
   case checkedItem of
-    InternalLink { route } ->
-      activeRoute == route
+    InternalLink { url } ->
+      activeUrl == url
     ParentItem { menuItems } ->
-      anyMenuItem (isActive activeRoute) menuItems
+      anyMenuItem (isActive activeUrl) menuItems
     _ ->
       False

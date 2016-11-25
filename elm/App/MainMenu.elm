@@ -18,16 +18,16 @@ init route =
       createMenu
         [ createParentItem "Root Item"
             [ createInternalLink "Home"
-                (AppRoute.HomeRoute)
+                (AppRoute.toString AppRoute.HomeRoute)
             , createParentItem "Demo"
                 [ createInternalLink "Overview"
-                    (AppRoute.DemoRoute DemoRoute.DemoRoute)
+                    (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.DemoRoute)
                 , createInternalLink "Accordion Demo"
-                    (AppRoute.DemoRoute DemoRoute.AccordionDemoRoute)
+                    (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.AccordionDemoRoute)
                 , createInternalLink "Checkbox Demo"
-                    (AppRoute.DemoRoute DemoRoute.CheckboxDemoRoute)
+                    (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.CheckboxDemoRoute)
                 , createInternalLink "Other Demos"
-                    (AppRoute.DemoRoute DemoRoute.OtherDemoRoute)
+                    (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.OtherDemoRoute)
                 ]
             , createParentItem "Resources"
                 [ createExternalLink "elm-app-boilerplate on GitHub"
@@ -38,12 +38,12 @@ init route =
             ]
         ]
   in
-    Menu.init route menu
+    Menu.init (AppRoute.toString route) menu
 
 update: Menu.Msg -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
 update = Menu.update
 
-urlUpdate: Route -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
+urlUpdate: String -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
 urlUpdate = Menu.urlUpdate
 
 view: Menu.Model -> Html Menu.Msg

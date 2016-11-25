@@ -14,7 +14,7 @@ import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
 import App.NotFoundPage as NotFoundPage
 import App.Demo.Demo as Demo
-import App.AppRoute exposing (Route(..), RoutingContext, onNavigate)
+import App.AppRoute as AppRoute exposing (Route(..), RoutingContext, onNavigate)
 import App.MainMenu as MainMenu
 
 type alias Model =
@@ -100,7 +100,7 @@ urlUpdate routingContext model =
         mapNotFound <| NotFoundPage.init routingContext.location
 
     (mainMenu, menuCmd) = mapMainMenu <|
-      MainMenu.urlUpdate routingContext.route model.mainMenu
+      MainMenu.urlUpdate (AppRoute.toString routingContext.route) model.mainMenu
   in
     ( { model
       | routeModel = routeModel
