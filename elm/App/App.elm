@@ -8,7 +8,7 @@ import Html exposing
   (div, header, footer, main', section, nav, h1, h2, a, text, Html)
 import Html.Attributes exposing (href)
 import Html.App
-import Html.Lazy exposing (lazy)
+import Html.Lazy exposing (lazy, lazy2)
 import Navigation exposing (Location, newUrl)
 import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
@@ -46,7 +46,7 @@ init routingContext =
       NotFoundRoute ->
         mapNotFound <| NotFoundPage.init routingContext.location
 
-    (menuModel, menuCmd) = mapMainMenu <| MainMenu.init routingContext.route
+    (menuModel, menuCmd) = mapMainMenu MainMenu.init
 
     model =
       { routeModel = routeModel
@@ -98,16 +98,12 @@ urlUpdate routingContext model =
             Demo.init demoRoute
       NotFoundRoute ->
         mapNotFound <| NotFoundPage.init routingContext.location
-
-    (mainMenu, menuCmd) = mapMainMenu <|
-      MainMenu.urlUpdate (AppRoute.toString routingContext.route) model.mainMenu
   in
     ( { model
       | routeModel = routeModel
-      , mainMenu = mainMenu
       , location = routingContext.location
       }
-    , Cmd.batch [routeCmd, menuCmd]
+    , routeCmd
     )
 
 
@@ -115,7 +111,7 @@ view: Model -> Html Msg
 view model =
   let
     mainMenu =
-      Html.App.map MainMenuMsg <| lazy MainMenu.view model.mainMenu
+      Html.App.map MainMenuMsg <| lazy2 MainMenu.view model.mainMenu model.location.pathname
 
     mainContent =
       case model.routeModel of

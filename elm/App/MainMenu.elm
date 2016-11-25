@@ -1,9 +1,9 @@
 module App.MainMenu exposing
-  ( init, update, urlUpdate, view
+  ( init, update, view
   , Model, Msg )
 
 import Html exposing (Html)
-import App.AppRoute as AppRoute exposing (Route)
+import App.AppRoute as AppRoute
 import App.Demo.DemoRoute as DemoRoute
 import App.Widget.Menu as Menu exposing
   (createMenu, createInternalLink, createExternalLink, createParentItem)
@@ -11,8 +11,8 @@ import App.Widget.Menu as Menu exposing
 type alias Model = Menu.Model
 type alias Msg = Menu.Msg
 
-init: Route -> (Menu.Model, Cmd Menu.Msg)
-init route =
+init: (Menu.Model, Cmd Menu.Msg)
+init =
   let
     menu =
       createMenu
@@ -38,13 +38,10 @@ init route =
             ]
         ]
   in
-    Menu.init (AppRoute.toString route) menu
+    Menu.init menu
 
 update: Menu.Msg -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
 update = Menu.update
 
-urlUpdate: String -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
-urlUpdate = Menu.urlUpdate
-
-view: Menu.Model -> Html Menu.Msg
+view: Menu.Model -> Menu.Url -> Html Menu.Msg
 view = Menu.view

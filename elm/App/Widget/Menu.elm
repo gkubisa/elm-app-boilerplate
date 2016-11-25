@@ -1,6 +1,6 @@
 module App.Widget.Menu exposing
-  ( init, update, urlUpdate, view
-  , Model, Msg
+  ( init, update, view
+  , Model, Url, Msg
   , createMenu, createInternalLink, createExternalLink, createParentItem
   )
 
@@ -31,17 +31,15 @@ type Menu =
 type alias Model =
   { menu: Menu
   , expandedParentItem: Maybe MenuItem
-  , activeUrl: Url
   }
 
 type Msg =
     ActivateMenuItem MenuItem
 
-init: Url -> Menu -> (Model, Cmd Msg)
-init activeUrl menu =
+init: Menu -> (Model, Cmd Msg)
+init menu =
   ( { menu = menu
     , expandedParentItem = Nothing
-    , activeUrl = activeUrl
     }
   , Cmd.none
   )
@@ -73,20 +71,11 @@ update msg model =
             -- let the browser handle activation of the `NavigationLink`
             (model, Cmd.none)
 
-urlUpdate: Url -> Model -> (Model, Cmd Msg)
-urlUpdate url model =
-  ( { model
-    | activeUrl = url
-    }
-  , Cmd.none
-  )
-
-view: Model -> Html Msg
-view model =
+view: Model -> Url -> Html Msg
+view model activeUrl =
   let
     menu = model.menu
     maybeExpandedItem = model.expandedParentItem
-    activeUrl = model.activeUrl
 
     menuView (Menu menuItems) =
       menuItemsView [ class "Menu" ] menuItems
