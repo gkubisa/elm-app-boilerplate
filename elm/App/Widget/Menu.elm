@@ -1,7 +1,7 @@
 module App.Widget.Menu exposing
   ( init, update, view
   , Model, Url, Msg
-  , createMenu, createInternalLink, createExternalLink, createParentItem
+  , createMenu, createNavigationLink, createParentItem
   )
 
 import Html exposing (ul, li, text, a, button, Html)
@@ -12,11 +12,7 @@ type alias Label = String
 type alias Url = String
 
 type MenuItem =
-    InternalLink
-      { label: Label
-      , url: Url
-      }
-  | ExternalLink
+    NavigationLink
       { label: Label
       , url: Url
       }
@@ -85,7 +81,7 @@ view model activeUrl =
 
     menuItemView menuItem =
       case menuItem of
-        InternalLink { label, url } ->
+        NavigationLink { label, url } ->
           let
             classAttribute = classList
               [ ("active", isActive activeUrl menuItem)
@@ -95,11 +91,6 @@ view model activeUrl =
               [ a [ href (url) ]
                   [ text label ]
               ]
-        ExternalLink { label, url } ->
-          li []
-            [ a [ href url ]
-                [ text label ]
-            ]
         ParentItem { label, menuItems } ->
           let
             classListAttribute = classList
@@ -124,16 +115,9 @@ getItems: Menu -> List MenuItem
 getItems (Menu menuItems) =
   menuItems
 
-createInternalLink: Label -> Url -> MenuItem
-createInternalLink label url =
-  InternalLink
-    { label = label
-    , url = url
-    }
-
-createExternalLink: Label -> Url -> MenuItem
-createExternalLink label url =
-  ExternalLink
+createNavigationLink: Label -> Url -> MenuItem
+createNavigationLink label url =
+  NavigationLink
     { label = label
     , url = url
     }
@@ -216,9 +200,7 @@ findParent childItem =
 isActive: Url -> MenuItem -> Bool
 isActive activeUrl checkedItem =
   case checkedItem of
-    InternalLink { url } ->
+    NavigationLink { url } ->
       activeUrl == url
     ParentItem { menuItems } ->
       anyMenuItem (isActive activeUrl) menuItems
-    _ ->
-      False

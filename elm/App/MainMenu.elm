@@ -6,7 +6,7 @@ import Html exposing (Html)
 import App.AppRoute as AppRoute
 import App.Demo.DemoRoute as DemoRoute
 import App.Widget.Menu as Menu exposing
-  (createMenu, createInternalLink, createExternalLink, createParentItem)
+  (createMenu, createNavigationLink, createParentItem)
 
 type alias Model = Menu.Model
 type alias Msg = Menu.Msg
@@ -17,22 +17,22 @@ init =
     menu =
       createMenu
         [ createParentItem "Root Item"
-            [ createInternalLink "Home"
+            [ createNavigationLink "Home"
                 (AppRoute.toString AppRoute.HomeRoute)
             , createParentItem "Demo"
-                [ createInternalLink "Overview"
+                [ createNavigationLink "Overview"
                     (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.DemoRoute)
-                , createInternalLink "Accordion Demo"
+                , createNavigationLink "Accordion Demo"
                     (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.AccordionDemoRoute)
-                , createInternalLink "Checkbox Demo"
+                , createNavigationLink "Checkbox Demo"
                     (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.CheckboxDemoRoute)
-                , createInternalLink "Other Demos"
+                , createNavigationLink "Other Demos"
                     (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.OtherDemoRoute)
                 ]
             , createParentItem "Resources"
-                [ createExternalLink "elm-app-boilerplate on GitHub"
+                [ createNavigationLink "elm-app-boilerplate on GitHub"
                     "https://github.com/gkubisa/elm-app-boilerplate"
-                , createExternalLink "Elm Lang Website"
+                , createNavigationLink "Elm Lang Website"
                     "http://elm-lang.org"
                 ]
             ]
