@@ -1,39 +1,40 @@
 @import (multiple) '../../Config';
 
-@App-Widget-Menu-primaryColor: @primaryColor;
-@App-Widget-Menu-textColor: @textPrimaryColor;
-@App-Widget-Menu-activeColor: @darkPrimaryColor;
-
+@Menu-primaryColor: @primaryColor;
+@Menu-textColor: @textPrimaryColor;
+@Menu-activeColor: @darkPrimaryColor;
 
 .Menu {
-  background-color: @App-Widget-Menu-primaryColor;
+  background-color: @Menu-primaryColor;
+}
 
-  ul {
-    display: none;
+.Menu_subMenu {
+  display: none;
+}
+
+.Menu_item {
+
+}
+
+.Menu_item-active {
+  & > .Menu_parentItem,
+  & > .Menu_navigationLink {
+    background-color: @Menu-activeColor;
   }
+}
 
-  li {
-    &.active {
-      & > a,
-      & > button {
-        background-color: @App-Widget-Menu-activeColor;
-      }
-    }
-
-    &.expanded {
-      & > ul {
-        display: block;
-      }
-    }
+.Menu_item-expanded {
+  & > .Menu_subMenu {
+    display: block;
   }
+}
 
-  a,
-  button {
-    background-color: transparent;
-    border: 0;
-    padding: 0.2em;
-    display: inline-block;
-    text-decoration: none;
-    color: @App-Widget-Menu-textColor;
-  }
+.Menu_parentItem,
+.Menu_navigationLink {
+  background-color: transparent;
+  border: 0;
+  padding: 0.2em;
+  display: inline-block;
+  text-decoration: none;
+  color: @Menu-textColor;
 }

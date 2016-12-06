@@ -1,7 +1,8 @@
 module App.Widget.Menu exposing
   ( init, update, view
-  , Model, Url, Msg
+  , Model, Url, Msg, Config
   , createMenu, createNavigationLink, createParentItem
+  , defaultConfig, customConfig
   )
 
 import Html exposing (ul, li, text, a, button, Html)
@@ -31,6 +32,30 @@ type alias Model =
 
 type Msg =
     ActivateMenuItem MenuItem
+
+type alias Config =
+  { menuClass: String
+  , subMenuClass: String
+  , menuItemClass: String
+  , navigationLinkClass: String
+  , parentItemClass: String
+  , activeClass: String
+  , expandedClass: String
+  }
+
+defaultConfig: Config
+defaultConfig = customConfig "Menu"
+
+customConfig: String -> Config
+customConfig baseClass =
+  { menuClass = baseClass
+  , subMenuClass = baseClass ++ "_subMenu"
+  , menuItemClass = baseClass ++ "_item"
+  , activeClass = baseClass ++ "_item-active"
+  , expandedClass = baseClass ++ "_item-expanded"
+  , navigationLinkClass = baseClass ++ "_navigationLink"
+  , parentItemClass = baseClass ++ "_parentItem"
+  }
 
 init: Menu -> (Model, Cmd Msg)
 init menu =
@@ -67,14 +92,14 @@ update msg model =
             -- let the browser handle activation of the `NavigationLink`
             (model, Cmd.none)
 
-view: Model -> Url -> Html Msg
-view model activeUrl =
+view: Config -> Model -> Url -> Html Msg
+view config model activeUrl =
   let
     menu = model.menu
     maybeExpandedItem = model.expandedParentItem
 
     menuView (Menu menuItems) =
-      menuItemsView [ class "Menu" ] menuItems
+      menuItemsView [ class config.menuClass ] menuItems
 
     menuItemsView attributes menuItems =
       ul attributes <| List.map menuItemView menuItems
@@ -84,25 +109,31 @@ view model activeUrl =
         NavigationLink { label, url } ->
           let
             classAttribute = classList
-              [ ("active", isActive activeUrl menuItem)
+              [ (config.menuItemClass, True)
+              , (config.activeClass, isActive activeUrl menuItem)
               ]
           in
             li [ classAttribute ]
-              [ a [ href (url) ]
+              [ a [ class config.navigationLinkClass
+                  , href url
+                  ]
                   [ text label ]
               ]
         ParentItem { label, menuItems } ->
           let
             classListAttribute = classList
-              [ ("expanded", isJustMember maybeExpandedItem [menuItem])
-              , ("active", isActive activeUrl menuItem)
+              [ (config.menuItemClass, True)
+              , (config.expandedClass, isJustMember maybeExpandedItem [menuItem])
+              , (config.activeClass, isActive activeUrl menuItem)
               ]
           in
             li [ classListAttribute ]
               [ button
-                  [ onClick (ActivateMenuItem menuItem) ]
+                  [ class config.parentItemClass
+                  , onClick (ActivateMenuItem menuItem)
+                  ]
                   [ text label ]
-              , menuItemsView [] menuItems
+              , menuItemsView [ class config.subMenuClass ] menuItems
               ]
   in
     menuView menu

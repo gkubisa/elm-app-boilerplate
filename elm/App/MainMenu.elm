@@ -44,4 +44,4 @@ update: Menu.Msg -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
 update = Menu.update
 
 view: Menu.Model -> Menu.Url -> Html Menu.Msg
-view = Menu.view
+view = Menu.view Menu.defaultConfig
