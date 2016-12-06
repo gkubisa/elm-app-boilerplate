@@ -1,7 +1,7 @@
 module App.Widget.Menu exposing
   ( init, update, view
   , Model, Url, Msg, Config
-  , createMenu, createNavigationLink, createParentItem
+  , createMenu, navigationLink, parentItem
   , defaultConfig, customConfig
   )
 
@@ -146,15 +146,15 @@ getItems: Menu -> List MenuItem
 getItems (Menu menuItems) =
   menuItems
 
-createNavigationLink: Label -> Url -> MenuItem
-createNavigationLink label url =
+navigationLink: Label -> Url -> MenuItem
+navigationLink label url =
   NavigationLink
     { label = label
     , url = url
     }
 
-createParentItem: Label -> List MenuItem -> MenuItem
-createParentItem label menuItems =
+parentItem: Label -> List MenuItem -> MenuItem
+parentItem label menuItems =
   ParentItem
     { label = label
     , menuItems = menuItems
