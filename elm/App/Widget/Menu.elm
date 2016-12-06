@@ -1,7 +1,7 @@
 module App.Widget.Menu exposing
   ( init, update, view
   , Model, Url, Msg, Config
-  , createMenu, navigationLink, parentItem
+  , navigationLink, parentItem
   , defaultConfig, customConfig
   )
 
@@ -19,14 +19,13 @@ type MenuItem =
       }
   | ParentItem
       { label: Label
-      , menuItems: List MenuItem
+      , menuItems: Menu
       }
 
-type Menu =
-  Menu (List MenuItem)
+type alias Menu = List MenuItem
 
 type alias Model =
-  { menu: Menu
+  { menuItems: Menu
   , expandedParentItem: Maybe MenuItem
   }
 
@@ -58,8 +57,8 @@ customConfig baseClass =
   }
 
 init: Menu -> (Model, Cmd Msg)
-init menu =
-  ( { menu = menu
+init menuItems =
+  ( { menuItems = menuItems
     , expandedParentItem = Nothing
     }
   , Cmd.none
@@ -67,40 +66,30 @@ init menu =
 
 update: Msg -> Model -> (Model, Cmd Msg)
 update msg model =
-  let
-    maybeExpandedItem = model.expandedParentItem
-    allItems = getItems model.menu
-  in
-    case msg of
-      ActivateMenuItem activatedItem ->
-        case activatedItem of
-          ParentItem _ ->
-            if isJustMember maybeExpandedItem [activatedItem]
-              then
-                -- an active item was activated, so expand its parent
-                ( { model
-                  | expandedParentItem = findParent activatedItem allItems
-                  }
-                , Cmd.none)
-              else
-                -- an inactive item was activated, so expand it
-                ( { model
-                  | expandedParentItem = Just activatedItem
-                  }
-                , Cmd.none)
-          _ ->
-            -- let the browser handle activation of the `NavigationLink`
-            (model, Cmd.none)
+  case msg of
+    ActivateMenuItem activatedItem ->
+      case activatedItem of
+        ParentItem _ ->
+          if isJustMember model.expandedParentItem [activatedItem]
+            then
+              -- an active item was activated, so expand its parent
+              ( { model
+                | expandedParentItem = findParent activatedItem model.menuItems
+                }
+              , Cmd.none)
+            else
+              -- an inactive item was activated, so expand it
+              ( { model
+                | expandedParentItem = Just activatedItem
+                }
+              , Cmd.none)
+        _ ->
+          -- let the browser handle activation of the `NavigationLink`
+          (model, Cmd.none)
 
 view: Config -> Model -> Url -> Html Msg
 view config model activeUrl =
   let
-    menu = model.menu
-    maybeExpandedItem = model.expandedParentItem
-
-    menuView (Menu menuItems) =
-      menuItemsView [ class config.menuClass ] menuItems
-
     menuItemsView attributes menuItems =
       ul attributes <| List.map menuItemView menuItems
 
@@ -123,7 +112,7 @@ view config model activeUrl =
           let
             classListAttribute = classList
               [ (config.menuItemClass, True)
-              , (config.expandedClass, isJustMember maybeExpandedItem [menuItem])
+              , (config.expandedClass, isJustMember model.expandedParentItem [menuItem])
               , (config.activeClass, isActive activeUrl menuItem)
               ]
           in
@@ -136,15 +125,7 @@ view config model activeUrl =
               , menuItemsView [ class config.subMenuClass ] menuItems
               ]
   in
-    menuView menu
-
-createMenu: List MenuItem -> Menu
-createMenu items =
-  Menu items
-
-getItems: Menu -> List MenuItem
-getItems (Menu menuItems) =
-  menuItems
+    menuItemsView [ class config.menuClass ] model.menuItems
 
 navigationLink: Label -> Url -> MenuItem
 navigationLink label url =
@@ -153,7 +134,7 @@ navigationLink label url =
     , url = url
     }
 
-parentItem: Label -> List MenuItem -> MenuItem
+parentItem: Label -> Menu -> MenuItem
 parentItem label menuItems =
   ParentItem
     { label = label
@@ -163,7 +144,7 @@ parentItem label menuItems =
 {-| Recursively searches the provided list, and returns the first item matching
 the predicate.
 -}
-findMenuItem: (MenuItem -> Bool) -> List MenuItem -> Maybe MenuItem
+findMenuItem: (MenuItem -> Bool) -> Menu -> Maybe MenuItem
 findMenuItem predicate items =
   case items of
     item :: remainingItems ->
@@ -185,7 +166,7 @@ findMenuItem predicate items =
 {-| Recursively searches the provided list, and returns true, if any of the
 menu items matches the predicate.
 -}
-anyMenuItem: (MenuItem -> Bool) -> List MenuItem -> Bool
+anyMenuItem: (MenuItem -> Bool) -> Menu -> Bool
 anyMenuItem predicate items =
   case findMenuItem predicate items of
     Just _ ->
@@ -205,14 +186,14 @@ isParentOf childItem parentItem =
 
 {-| Recursively checks, if `item` is a member of the specified list.
 -}
-isMember: MenuItem -> List MenuItem -> Bool
+isMember: MenuItem -> Menu -> Bool
 isMember item =
   anyMenuItem ((==) item)
 
 {-| Recursively checks, if the item inside `maybeItem` is a member of the
 specified list.
 -}
-isJustMember: Maybe MenuItem -> List MenuItem -> Bool
+isJustMember: Maybe MenuItem -> Menu -> Bool
 isJustMember maybeItem menuItems =
   case maybeItem of
     Just item ->
@@ -222,7 +203,7 @@ isJustMember maybeItem menuItems =
 
 {-| Recursively searches for the parent of `childItem`.
 -}
-findParent: MenuItem -> List MenuItem -> Maybe MenuItem
+findParent: MenuItem -> Menu -> Maybe MenuItem
 findParent childItem =
   findMenuItem (isParentOf childItem)
 
