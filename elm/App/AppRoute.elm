@@ -1,5 +1,6 @@
 module App.AppRoute exposing
   ( Route(..), RoutingContext
+  , getRoute, getLocation
   , pathnameParser, toPathnameFragment
   , urlParser
   , toUrl, toString
@@ -20,10 +21,13 @@ type Route =
   | DemoRoute DemoRoute.Route
   | NotFoundRoute
 
-type alias RoutingContext =
-  { route: Route
-  , location: Location
-  }
+type RoutingContext = RoutingContext Route Location
+
+getRoute: RoutingContext -> Route
+getRoute (RoutingContext route _) = route
+
+getLocation: RoutingContext -> Location
+getLocation (RoutingContext _ location) = location
 
 {-| A parser which turns `Location.pathname` into a `Route`.
 -}
@@ -57,9 +61,7 @@ urlParser =
           Err _ ->
             NotFoundRoute
     in
-      { route = route
-      , location = location
-      }
+      RoutingContext route location
 
 {-| Converts the specified `Route` to a `Url`
 -}

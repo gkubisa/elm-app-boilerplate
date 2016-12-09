@@ -1,6 +1,6 @@
 module App.Widget.Menu exposing
   ( init, update, view
-  , Model, Url, Msg, Config
+  , Model, Msg, Config, Url, Label
   , navigationLink, parentItem
   , defaultConfig, customConfig
   )
@@ -24,13 +24,13 @@ type MenuItem =
 
 type alias Menu = List MenuItem
 
-type alias Model =
+type Model = Model
   { menuItems: Menu
   , expandedParentItem: Maybe MenuItem
   }
 
 type Msg =
-    ActivateMenuItem MenuItem
+  ActivateMenuItem MenuItem
 
 type alias Config =
   { menuClass: String
@@ -58,14 +58,15 @@ customConfig baseClass =
 
 init: Menu -> (Model, Cmd Msg)
 init menuItems =
-  ( { menuItems = menuItems
-    , expandedParentItem = Nothing
-    }
+  ( Model
+      { menuItems = menuItems
+      , expandedParentItem = Nothing
+      }
   , Cmd.none
   )
 
 update: Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+update msg (Model model) =
   case msg of
     ActivateMenuItem activatedItem ->
       case activatedItem of
@@ -73,22 +74,24 @@ update msg model =
           if isJustMember model.expandedParentItem [activatedItem]
             then
               -- an active item was activated, so expand its parent
-              ( { model
-                | expandedParentItem = findParent activatedItem model.menuItems
-                }
+              ( Model
+                  { model
+                  | expandedParentItem = findParent activatedItem model.menuItems
+                  }
               , Cmd.none)
             else
               -- an inactive item was activated, so expand it
-              ( { model
-                | expandedParentItem = Just activatedItem
-                }
+              ( Model
+                  { model
+                  | expandedParentItem = Just activatedItem
+                  }
               , Cmd.none)
         _ ->
           -- let the browser handle activation of the `NavigationLink`
-          (model, Cmd.none)
+          (Model model, Cmd.none)
 
 view: Config -> Model -> Url -> Html Msg
-view config model activeUrl =
+view config (Model model) activeUrl =
   let
     menuItemsView attributes menuItems =
       ul attributes <| List.map menuItemView menuItems

@@ -7,7 +7,7 @@ import Html exposing (Html, section, h1, p, text)
 import Navigation exposing (Location, modifyUrl)
 import Erl
 
-type alias Model =
+type Model = Model
   { location: Location
   }
 
@@ -30,10 +30,10 @@ init location =
       else
         modifyUrl << Erl.toString <| { parsedUrl | hasTrailingSlash = True }
   in
-    (model, cmd)
+    (Model model, cmd)
 
 view: Model -> Html Msg
-view model =
+view (Model model) =
   section []
     [ h1 []
         [ text "Not Found" ]

@@ -9,32 +9,33 @@ module App.Demo.Demo exposing
 import Html exposing (text, Html)
 import App.Demo.DemoRoute exposing (Route(..))
 
-type alias Model =
+type Model = Model
   { routeModel: Route
   }
 
 type Msg =
-    Noop
+  Noop
 
 init : Route -> (Model, Cmd Msg)
 init route =
-  ( { routeModel = route
-    }
+  ( Model
+      { routeModel = route
+      }
   , Cmd.none
   )
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  ( model, Cmd.none )
+update msg (Model model) =
+  ( Model model, Cmd.none )
 
 urlUpdate : Route -> Model -> (Model, Cmd Msg)
-urlUpdate route model =
-  ( { model | routeModel = route }
+urlUpdate route (Model model) =
+  ( Model { model | routeModel = route }
   , Cmd.none
   )
 
 view : Model -> Html Msg
-view model =
+view (Model model) =
   text <| "Demo: " ++ case model.routeModel of
     DemoRoute ->
       "Main Page"
@@ -46,5 +47,5 @@ view model =
       "Other Demo Page"
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions (Model model) =
   Sub.none

@@ -14,10 +14,10 @@ import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
 import App.NotFoundPage as NotFoundPage
 import App.Demo.Demo as Demo
-import App.AppRoute as AppRoute exposing (Route(..), RoutingContext, onNavigate)
+import App.AppRoute as AppRoute exposing (Route(..), RoutingContext, onNavigate, getRoute, getLocation)
 import App.MainMenu as MainMenu
 
-type alias Model =
+type Model = Model
   { routeModel: RouteModel
   , mainMenu: MainMenu.Model
   , location: Location
@@ -38,37 +38,37 @@ type Msg =
 init: RoutingContext -> (Model, Cmd Msg)
 init routingContext =
   let
-    (routeModel, routeCmd) = case routingContext.route of
+    (routeModel, routeCmd) = case getRoute routingContext of
       HomeRoute ->
         mapHome <| HomePage.init
       DemoRoute demoRoute ->
         mapDemo <| Demo.init demoRoute
       NotFoundRoute ->
-        mapNotFound <| NotFoundPage.init routingContext.location
+        mapNotFound <| NotFoundPage.init (getLocation routingContext)
 
     (menuModel, menuCmd) = mapMainMenu MainMenu.init
 
     model =
       { routeModel = routeModel
       , mainMenu = menuModel
-      , location = routingContext.location
+      , location = getLocation routingContext
       }
 
     cmd = Cmd.batch [ routeCmd, menuCmd ]
   in
-    (model, cmd)
+    (Model model, cmd)
 
 update: Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+update msg (Model model) =
   case msg of
     Navigate href ->
-      (model, newUrl href)
+      (Model model, newUrl href)
     MainMenuMsg mainMenuMsg ->
       let
         (mainMenu, mainMenuCmd) =
           mapMainMenu <| MainMenu.update mainMenuMsg model.mainMenu
       in
-        ( { model | mainMenu = mainMenu }
+        ( Model { model | mainMenu = mainMenu }
         , mainMenuCmd)
     DemoMsg demoMsg ->
       case model.routeModel of
@@ -77,17 +77,17 @@ update msg model =
             (demo, demoCmd) =
               mapDemo <| Demo.update demoMsg demoModel
           in
-            ( { model | routeModel = demo }
+            ( Model { model | routeModel = demo }
             , demoCmd )
         _ ->
-          (model, Cmd.none)
+          (Model model, Cmd.none)
     _ ->
-      (model, Cmd.none)
+      (Model model, Cmd.none)
 
 urlUpdate: RoutingContext -> Model -> (Model, Cmd Msg)
-urlUpdate routingContext model =
+urlUpdate routingContext (Model model) =
   let
-    (routeModel, routeCmd) = case routingContext.route of
+    (routeModel, routeCmd) = case getRoute routingContext of
       HomeRoute ->
         mapHome <| HomePage.init
       DemoRoute demoRoute ->
@@ -97,18 +97,19 @@ urlUpdate routingContext model =
           _ ->
             Demo.init demoRoute
       NotFoundRoute ->
-        mapNotFound <| NotFoundPage.init routingContext.location
+        mapNotFound <| NotFoundPage.init (getLocation routingContext)
   in
-    ( { model
-      | routeModel = routeModel
-      , location = routingContext.location
-      }
+    ( Model
+        { model
+        | routeModel = routeModel
+        , location = getLocation routingContext
+        }
     , routeCmd
     )
 
 
 view: Model -> Html Msg
-view model =
+view (Model model) =
   let
     mainMenu =
       Html.App.map MainMenuMsg <| lazy2 MainMenu.view model.mainMenu model.location.pathname
@@ -139,7 +140,7 @@ view model =
       ]
 
 subscriptions: Model -> Sub Msg
-subscriptions model =
+subscriptions (Model model) =
   Sub.none
 
 {-| Tags the Home model and command.

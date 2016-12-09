@@ -5,16 +5,14 @@ module App.HomePage exposing
 
 import Html exposing ( Html, h1, text )
 
-type alias Model =
-  {
-  }
+type Model = Model
 
 type Msg =
   Noop
 
 init: (Model, Cmd Msg)
 init =
-  ( {}
+  ( Model
   , Cmd.none
   )
 
