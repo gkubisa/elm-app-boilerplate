@@ -123,17 +123,20 @@ view (Model model) =
         NotFoundModel notFoundModel ->
           Html.App.map NotFoundMsg <| lazy NotFoundPage.view notFoundModel
   in
-    div [ onNavigate model.location.origin Navigate ]
+    div
+      [ class "App"
+      , onNavigate model.location.origin Navigate
+      ]
       [ header [ class "App_header" ]
           [ h1 [ class "App_heading" ]
               [ text "elm-app-boilerplate" ]
           , nav [ class "App_navigation" ]
               [ mainMenu ]
           ]
-      , main' []
+      , main' [ class "App_main" ]
           [ mainContent
           ]
-      , footer []
+      , footer [ class "App_footer" ]
           [ a [ href "https://github.com/gkubisa/elm-app-boilerplate" ]
               [ text "Fork it on GitHub" ]
           ]
