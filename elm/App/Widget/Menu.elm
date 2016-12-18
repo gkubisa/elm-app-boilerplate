@@ -89,9 +89,14 @@ update msg (Model model) =
                   | expandedParentItem = Just activatedItem
                   }
               , Cmd.none)
-        _ ->
-          -- let the browser handle activation of the `NavigationLink`
-          (Model model, Cmd.none)
+        NavigationLink _ ->
+          -- collapse the menu and let the browser handle the navigation
+          ( Model
+              { model
+              | expandedParentItem = Nothing
+              }
+          , Cmd.none
+          )
 
 view: Config -> Model -> Url -> Html Msg
 view config (Model model) activeUrl =
@@ -118,6 +123,7 @@ view config (Model model) activeUrl =
             li [ classAttribute ]
               [ a [ class config.menuItemContentClass
                   , href url
+                  , onClick (ActivateMenuItem menuItem)
                   ]
                   [ text label ]
               ]
