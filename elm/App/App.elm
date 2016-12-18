@@ -6,7 +6,7 @@ module App.App exposing
 
 import Html exposing
   (div, header, footer, main', section, nav, h1, h2, a, text, Html)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (class, href)
 import Html.App
 import Html.Lazy exposing (lazy, lazy2)
 import Navigation exposing (Location, newUrl)
@@ -124,10 +124,10 @@ view (Model model) =
           Html.App.map NotFoundMsg <| lazy NotFoundPage.view notFoundModel
   in
     div [ onNavigate model.location.origin Navigate ]
-      [ header []
-          [ h1 []
+      [ header [ class "App_header" ]
+          [ h1 [ class "App_heading" ]
               [ text "elm-app-boilerplate" ]
-          , nav []
+          , nav [ class "App_navigation" ]
               [ mainMenu ]
           ]
       , main' []
@@ -135,7 +135,7 @@ view (Model model) =
           ]
       , footer []
           [ a [ href "https://github.com/gkubisa/elm-app-boilerplate" ]
-              [ text "Source Code on GitHub" ]
+              [ text "Fork it on GitHub" ]
           ]
       ]
 

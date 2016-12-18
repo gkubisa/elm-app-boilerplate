@@ -34,8 +34,9 @@ type Msg =
 
 type alias Config =
   { menuClass: String
-  , subMenuClass: String
+  , menuItemListClass: String
   , menuItemClass: String
+  , menuItemContentClass: String
   , navigationLinkClass: String
   , parentItemClass: String
   , activeClass: String
@@ -48,8 +49,9 @@ defaultConfig = customConfig "Menu"
 customConfig: String -> Config
 customConfig baseClass =
   { menuClass = baseClass
-  , subMenuClass = baseClass ++ "_subMenu"
+  , menuItemListClass = baseClass ++ "_itemList"
   , menuItemClass = baseClass ++ "_item"
+  , menuItemContentClass = baseClass ++ "_itemContent"
   , activeClass = baseClass ++ "_item-active"
   , expandedClass = baseClass ++ "_item-expanded"
   , navigationLinkClass = baseClass ++ "_navigationLink"
@@ -76,7 +78,8 @@ update msg (Model model) =
               -- an active item was activated, so expand its parent
               ( Model
                   { model
-                  | expandedParentItem = findParent activatedItem model.menuItems
+                  | expandedParentItem =
+                      findParent activatedItem model.menuItems
                   }
               , Cmd.none)
             else
@@ -93,20 +96,27 @@ update msg (Model model) =
 view: Config -> Model -> Url -> Html Msg
 view config (Model model) activeUrl =
   let
-    menuItemsView attributes menuItems =
-      ul attributes <| List.map menuItemView menuItems
+    menuItemsView level menuItems =
+      ul
+        [ classList
+            [ (config.menuClass, level == 1)
+            , (config.menuItemListClass, True)
+            , (config.menuItemListClass ++ "-level" ++ (toString level), True)
+            ]
+        ] <| List.map (menuItemView level) menuItems
 
-    menuItemView menuItem =
+    menuItemView level menuItem =
       case menuItem of
         NavigationLink { label, url } ->
           let
             classAttribute = classList
               [ (config.menuItemClass, True)
+              , (config.navigationLinkClass, True)
               , (config.activeClass, isActive activeUrl menuItem)
               ]
           in
             li [ classAttribute ]
-              [ a [ class config.navigationLinkClass
+              [ a [ class config.menuItemContentClass
                   , href url
                   ]
                   [ text label ]
@@ -115,20 +125,21 @@ view config (Model model) activeUrl =
           let
             classListAttribute = classList
               [ (config.menuItemClass, True)
+              , (config.parentItemClass, True)
               , (config.expandedClass, isJustMember model.expandedParentItem [menuItem])
               , (config.activeClass, isActive activeUrl menuItem)
               ]
           in
             li [ classListAttribute ]
               [ button
-                  [ class config.parentItemClass
+                  [ class config.menuItemContentClass
                   , onClick (ActivateMenuItem menuItem)
                   ]
                   [ text label ]
-              , menuItemsView [ class config.subMenuClass ] menuItems
+              , menuItemsView (level + 1) menuItems
               ]
   in
-    menuItemsView [ class config.menuClass ] model.menuItems
+    menuItemsView 1 model.menuItems
 
 navigationLink: Label -> Url -> MenuItem
 navigationLink label url =

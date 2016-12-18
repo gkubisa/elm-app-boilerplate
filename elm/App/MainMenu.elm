@@ -11,6 +11,9 @@ import App.Widget.Menu as Menu exposing
 type alias Model = Menu.Model
 type alias Msg = Menu.Msg
 
+menuConfig: Menu.Config
+menuConfig = Menu.customConfig "MainMenu"
+
 init: (Menu.Model, Cmd Menu.Msg)
 init =
   Menu.init
@@ -28,7 +31,7 @@ init =
                 (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.OtherDemoRoute)
             ]
         , parentItem "Resources"
-            [ navigationLink "elm-app-boilerplate on GitHub"
+            [ navigationLink "Fork it on GitHub"
                 "https://github.com/gkubisa/elm-app-boilerplate"
             , navigationLink "Elm Lang Website"
                 "http://elm-lang.org"
@@ -40,4 +43,4 @@ update: Menu.Msg -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
 update = Menu.update
 
 view: Menu.Model -> Menu.Url -> Html Menu.Msg
-view = Menu.view Menu.defaultConfig
+view = Menu.view menuConfig
