@@ -8,13 +8,15 @@ import App.Demo.DemoRoute as DemoRoute
 import App.Widget.Menu as Menu exposing
   (navigationLink, parentItem)
 
+type alias Config = Menu.Config
 type alias Model = Menu.Model
 type alias Msg = Menu.Msg
+type alias Url = Menu.Url
 
-menuConfig: Menu.Config
+menuConfig: Config
 menuConfig = Menu.customConfig "MainMenu"
 
-init: (Menu.Model, Cmd Menu.Msg)
+init: (Model, Cmd Msg)
 init =
   Menu.init
     [ parentItem "Root Item"
@@ -39,8 +41,8 @@ init =
         ]
     ]
 
-update: Menu.Msg -> Menu.Model -> (Menu.Model, Cmd Menu.Msg)
+update: Msg -> Model -> (Model, Cmd Msg)
 update = Menu.update
 
-view: Menu.Model -> Menu.Url -> Html Menu.Msg
+view: Model -> Url -> Html Msg
 view = Menu.view menuConfig
