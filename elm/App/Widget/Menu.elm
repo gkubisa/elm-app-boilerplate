@@ -32,7 +32,7 @@ type Model = Model
 type Msg =
   ActivateMenuItem MenuItem
 
-type alias Config =
+type Config = Config
   { menuClass: String
   , menuItemListClass: String
   , menuItemClass: String
@@ -47,7 +47,7 @@ defaultConfig: Config
 defaultConfig = customConfig "Menu"
 
 customConfig: String -> Config
-customConfig baseClass =
+customConfig baseClass = Config
   { menuClass = baseClass
   , menuItemListClass = baseClass ++ "_itemList"
   , menuItemClass = baseClass ++ "_item"
@@ -99,7 +99,7 @@ update msg (Model model) =
           )
 
 view: Config -> Model -> Url -> Html Msg
-view config (Model model) activeUrl =
+view (Config config) (Model model) activeUrl =
   let
     menuItemsView level menuItems =
       ul
