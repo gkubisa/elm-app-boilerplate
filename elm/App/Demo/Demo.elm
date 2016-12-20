@@ -6,7 +6,7 @@ module App.Demo.Demo exposing
 {-| The main demo component. Handles the demo section routing.
 -}
 
-import Html exposing (text, Html)
+import Html exposing (Html, section, h1, p, text)
 import App.Demo.DemoRoute exposing (Route(..))
 
 type Model = Model
@@ -36,15 +36,27 @@ urlUpdate route (Model model) =
 
 view : Model -> Html Msg
 view (Model model) =
-  text <| "Demo: " ++ case model.routeModel of
+  case model.routeModel of
     DemoRoute ->
-      "Main Page"
+      section []
+        [ h1 [] [ text "Demo Overview" ]
+        , p [] [ text "An overview of all demo pages will go here." ]
+        ]
     AccordionDemoRoute ->
-      "Accordion Page"
+      section []
+        [ h1 [] [ text "Accordion Demo" ]
+        , p [] [ text "An accordion component demo will go here." ]
+        ]
     CheckboxDemoRoute ->
-      "Checkbox Page"
+      section []
+        [ h1 [] [ text "Checkbox Demo" ]
+        , p [] [ text "A checkbox demo will go here." ]
+        ]
     OtherDemoRoute ->
-      "Other Demo Page"
+      section []
+        [ h1 [] [ text "Other Demo" ]
+        , p [] [ text "Some other demo will go here." ]
+        ]
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =

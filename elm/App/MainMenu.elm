@@ -23,13 +23,13 @@ init =
         [ navigationLink "Home"
             (AppRoute.toString AppRoute.HomeRoute)
         , parentItem "Demo"
-            [ navigationLink "Overview"
+            [ navigationLink "Demo Overview"
                 (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.DemoRoute)
             , navigationLink "Accordion Demo"
                 (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.AccordionDemoRoute)
             , navigationLink "Checkbox Demo"
                 (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.CheckboxDemoRoute)
-            , navigationLink "Other Demos"
+            , navigationLink "Other Demo"
                 (AppRoute.toString <| AppRoute.DemoRoute DemoRoute.OtherDemoRoute)
             ]
         , parentItem "Resources"

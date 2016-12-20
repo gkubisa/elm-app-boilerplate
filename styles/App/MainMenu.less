@@ -1,4 +1,5 @@
 @import (multiple) '../Config';
+@import (multiple) '../Util';
 
 @MainMenu-primaryColor: @primaryColor;
 @MainMenu-textColor: @textPrimaryColor;
@@ -69,9 +70,12 @@
 .MainMenu_itemContent {
   background-color: transparent;
   border: 0;
-  padding: 0.4em;
+  padding: 0.6rem 0.4em;
   display: inline-block;
   text-decoration: none;
   color: @MainMenu-textColor;
   white-space: nowrap;
+  &:hover {
+    .highlight();
+  }
 }

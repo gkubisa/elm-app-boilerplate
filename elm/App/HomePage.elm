@@ -3,7 +3,8 @@ module App.HomePage exposing
   , Model, Msg
   )
 
-import Html exposing ( Html, h1, text )
+import Html exposing ( Html, section, h1, p, a, text )
+import Html.Attributes exposing ( href )
 
 type Model = Model
 
@@ -18,5 +19,13 @@ init =
 
 view: Model -> Html Msg
 view model =
-  h1 []
-    [ text "Welcome to elm-app-boilerplate!" ]
+  section []
+    [ h1 [] [ text "elm-app-boilerplate" ]
+    , p []
+        [ text """elm-app-boilerplate provides a great foundation for creating
+            new web applications in Elm. """
+        , a [ href "https://github.com/gkubisa/elm-app-boilerplate" ]
+            [ text "Fork it on Github" ]
+        , text " and get coding!"
+        ]
+    ]

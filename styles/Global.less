@@ -1,4 +1,5 @@
 @import (multiple) 'Config';
+@import (multiple) 'Util';
 
 button:hover,
 a:hover,
@@ -6,7 +7,10 @@ input:hover,
 textarea:hover,
 :focus {
   outline: 0;
-  box-shadow: inset 0 0 0.1em 0.125em @accentColor;
+}
+
+:focus {
+  .highlight();
 }
 
 button {

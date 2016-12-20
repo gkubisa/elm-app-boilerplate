@@ -129,7 +129,7 @@ view (Model model) =
       ]
       [ header [ class "App_header" ]
           [ h1 [ class "App_heading" ]
-              [ text "elm-app-boilerplate" ]
+              [ a [ href "/" ] [ text "elm-app-boilerplate" ] ]
           , nav [ class "App_navigation" ]
               [ mainMenu ]
           ]
