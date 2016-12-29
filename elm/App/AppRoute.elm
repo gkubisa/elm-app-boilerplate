@@ -1,15 +1,13 @@
 module App.AppRoute exposing
-  ( Route(..), RoutingContext
-  , getRoute, getLocation
+  ( Route(..)
   , pathnameParser, toPathnameFragment
-  , urlParser
   , toUrl, toString
   , newRoute, modifyRoute
   , onNavigate
   )
 
 import Navigation exposing (Location)
-import UrlParser exposing (format, s, oneOf, (</>))
+import UrlParser exposing (map, s, oneOf, (</>))
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions, defaultOptions)
 import Json.Decode as JD
@@ -19,23 +17,14 @@ import App.Demo.DemoRoute as DemoRoute
 type Route =
     HomeRoute
   | DemoRoute DemoRoute.Route
-  | NotFoundRoute
-
-type RoutingContext = RoutingContext Route Location
-
-getRoute: RoutingContext -> Route
-getRoute (RoutingContext route _) = route
-
-getLocation: RoutingContext -> Location
-getLocation (RoutingContext _ location) = location
 
 {-| A parser which turns `Location.pathname` into a `Route`.
 -}
 pathnameParser: UrlParser.Parser (Route -> a) a
 pathnameParser =
   oneOf
-    [ format DemoRoute (s "" </> s "demo" </> DemoRoute.pathnameParser)
-    , format HomeRoute (s "")
+    [ map DemoRoute (s "demo" </> DemoRoute.pathnameParser)
+    , map HomeRoute (s "")
     ]
 
 toPathnameFragment: Route -> String
@@ -45,23 +34,6 @@ toPathnameFragment route =
       "/"
     DemoRoute _ ->
       "/demo/"
-    NotFoundRoute ->
-      ""
-
-{-| A parser which turns `Location` into a `Route`.
--}
-urlParser: Navigation.Parser RoutingContext
-urlParser =
-  Navigation.makeParser <| \location ->
-    let
-      route =
-        case UrlParser.parse identity pathnameParser location.pathname of
-          Ok route ->
-            route
-          Err _ ->
-            NotFoundRoute
-    in
-      RoutingContext route location
 
 {-| Converts the specified `Route` to a `Url`
 -}
@@ -109,17 +81,18 @@ onNavigate expectedOrigin tagger =
     nodeNameDecoder = JD.at [ "target", "nodeName" ] JD.string
     originDecoder = JD.at [ "target", "origin" ] JD.string
     hrefDecoder = JD.at [ "target", "href" ] JD.string
-    eventDecoder = JD.object3 (,,) nodeNameDecoder originDecoder hrefDecoder
+    eventDecoder = JD.map3 (,,) nodeNameDecoder originDecoder hrefDecoder
 
-    decoder = JD.customDecoder eventDecoder (\(nodeName, origin, href) ->
-      if nodeName /= "A" then
-        Err "Expected `target.nodeName` to equal \"A\""
-      else if href == "" then
-        Err "Expected `target.href` to be non-empty"
-      else if origin /= expectedOrigin then
-        Err <| "Expected `target.origin` to equal \"" ++ expectedOrigin ++ "\""
-      else
-        Ok (tagger href)
-    )
+    decoder = eventDecoder
+      |> JD.andThen (\(nodeName, origin, href) ->
+        if nodeName /= "A" then
+          JD.fail "Expected `target.nodeName` to equal \"A\""
+        else if href == "" then
+          JD.fail "Expected `target.href` to be non-empty"
+        else if origin /= expectedOrigin then
+          JD.fail <| "Expected `target.origin` to equal \"" ++ expectedOrigin ++ "\""
+        else
+          JD.succeed (tagger href)
+      )
   in
     onWithOptions "click" options decoder

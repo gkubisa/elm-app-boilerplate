@@ -1,21 +1,25 @@
 module App.App exposing
-  (init, update, urlUpdate, view, subscriptions)
+  ( Model, Msg
+  , init, update, view, subscriptions
+  , locationChanged
+  )
 
 {-| The main application component. Handles the top level routing.
 -}
 
-import Html exposing
-  (div, header, footer, main', section, nav, h1, h2, a, text, Html)
-import Html.Attributes exposing (class, href)
-import Html.App
-import Html.Lazy exposing (lazy, lazy2)
-import Navigation exposing (Location, newUrl)
-import Tuple2 exposing (mapEach, mapSnd)
 import App.HomePage as HomePage
 import App.NotFoundPage as NotFoundPage
 import App.Demo.Demo as Demo
-import App.AppRoute as AppRoute exposing (Route(..), RoutingContext, onNavigate, getRoute, getLocation)
+import App.AppRoute as AppRoute exposing (Route(..), onNavigate)
 import App.MainMenu as MainMenu
+import Html exposing
+  (div, header, footer, main_, section, nav, h1, h2, a, text, Html)
+import Html.Attributes exposing (class, href)
+import Html.Lazy exposing (lazy, lazy2)
+import Navigation exposing (Location, newUrl)
+import Tuple2 exposing (mapEach, mapSecond)
+import UrlParser
+
 
 type Model = Model
   { routeModel: RouteModel
@@ -29,29 +33,38 @@ type RouteModel =
   | NotFoundModel NotFoundPage.Model
 
 type Msg =
-    HomeMsg HomePage.Msg
-  | DemoMsg Demo.Msg
-  | NotFoundMsg NotFoundPage.Msg
+    HomePageMsg HomePage.Msg
+  | DemoPageMsg Demo.Msg
+  | NotFoundPageMsg NotFoundPage.Msg
   | MainMenuMsg MainMenu.Msg
   | Navigate String
+  | LocationChanged Location
 
-init: RoutingContext -> (Model, Cmd Msg)
-init routingContext =
+locationChanged: Location -> Msg
+locationChanged location =
+  LocationChanged location
+
+init: Location -> (Model, Cmd Msg)
+init location =
   let
-    (routeModel, routeCmd) = case getRoute routingContext of
-      HomeRoute ->
-        mapHome <| HomePage.init
-      DemoRoute demoRoute ->
-        mapDemo <| Demo.init demoRoute
-      NotFoundRoute ->
-        mapNotFound <| NotFoundPage.init (getLocation routingContext)
+    maybeRoute = UrlParser.parsePath AppRoute.pathnameParser location
+
+    (routeModel, routeCmd) = case maybeRoute of
+      Just route ->
+        case route of
+          HomeRoute ->
+            mapHome <| HomePage.init
+          DemoRoute demoRoute ->
+            mapDemo <| Demo.init demoRoute
+      Nothing ->
+        mapNotFound <| NotFoundPage.init location
 
     (menuModel, menuCmd) = mapMainMenu MainMenu.init
 
     model =
       { routeModel = routeModel
       , mainMenu = menuModel
-      , location = getLocation routingContext
+      , location = location
       }
 
     cmd = Cmd.batch [ routeCmd, menuCmd ]
@@ -70,7 +83,7 @@ update msg (Model model) =
       in
         ( Model { model | mainMenu = mainMenu }
         , mainMenuCmd)
-    DemoMsg demoMsg ->
+    DemoPageMsg demoMsg ->
       case model.routeModel of
         DemoModel demoModel ->
           let
@@ -81,47 +94,47 @@ update msg (Model model) =
             , demoCmd )
         _ ->
           (Model model, Cmd.none)
+    LocationChanged location ->
+      let
+        maybeRoute = UrlParser.parsePath AppRoute.pathnameParser location
+        (routeModel, routeCmd) = case maybeRoute of
+          Just route ->
+            case route of
+              HomeRoute ->
+                mapHome <| HomePage.init
+              DemoRoute demoRoute ->
+                mapDemo <| case model.routeModel of
+                  DemoModel demoModel ->
+                    Demo.update (Demo.routeChanged demoRoute) demoModel
+                  _ ->
+                    Demo.init demoRoute
+          Nothing ->
+            mapNotFound <| NotFoundPage.init location
+      in
+        ( Model
+            { model
+            | routeModel = routeModel
+            , location = location
+            }
+        , routeCmd
+        )
     _ ->
       (Model model, Cmd.none)
-
-urlUpdate: RoutingContext -> Model -> (Model, Cmd Msg)
-urlUpdate routingContext (Model model) =
-  let
-    (routeModel, routeCmd) = case getRoute routingContext of
-      HomeRoute ->
-        mapHome <| HomePage.init
-      DemoRoute demoRoute ->
-        mapDemo <| case model.routeModel of
-          DemoModel demoModel ->
-            Demo.urlUpdate demoRoute demoModel
-          _ ->
-            Demo.init demoRoute
-      NotFoundRoute ->
-        mapNotFound <| NotFoundPage.init (getLocation routingContext)
-  in
-    ( Model
-        { model
-        | routeModel = routeModel
-        , location = getLocation routingContext
-        }
-    , routeCmd
-    )
-
 
 view: Model -> Html Msg
 view (Model model) =
   let
     mainMenu =
-      Html.App.map MainMenuMsg <| lazy2 MainMenu.view model.mainMenu model.location.pathname
+      Html.map MainMenuMsg <| lazy2 MainMenu.view model.mainMenu model.location.pathname
 
     mainContent =
       case model.routeModel of
         HomeModel homeModel ->
-          Html.App.map HomeMsg <| lazy HomePage.view homeModel
+          Html.map HomePageMsg <| lazy HomePage.view homeModel
         DemoModel demoModel ->
-          Html.App.map DemoMsg <| lazy Demo.view demoModel
+          Html.map DemoPageMsg <| lazy Demo.view demoModel
         NotFoundModel notFoundModel ->
-          Html.App.map NotFoundMsg <| lazy NotFoundPage.view notFoundModel
+          Html.map NotFoundPageMsg <| lazy NotFoundPage.view notFoundModel
   in
     div
       [ class "App"
@@ -133,7 +146,7 @@ view (Model model) =
           , nav [ class "App_navigation" ]
               [ mainMenu ]
           ]
-      , main' [ class "App_main" ]
+      , main_ [ class "App_main" ]
           [ mainContent
           ]
       , footer [ class "App_footer" ]
@@ -150,22 +163,22 @@ subscriptions (Model model) =
 -}
 mapHome: (HomePage.Model, Cmd HomePage.Msg) -> (RouteModel, Cmd Msg)
 mapHome =
-  mapEach HomeModel (Cmd.map HomeMsg)
+  mapEach HomeModel (Cmd.map HomePageMsg)
 
 {-| Tags the Demo model and command.
 -}
 mapDemo: (Demo.Model, Cmd Demo.Msg) -> (RouteModel, Cmd Msg)
 mapDemo =
-  mapEach DemoModel (Cmd.map DemoMsg)
+  mapEach DemoModel (Cmd.map DemoPageMsg)
 
 {-| Tags the NotFound model and command.
 -}
 mapNotFound: (NotFoundPage.Model, Cmd NotFoundPage.Msg) -> (RouteModel, Cmd Msg)
 mapNotFound =
-  mapEach NotFoundModel (Cmd.map NotFoundMsg)
+  mapEach NotFoundModel (Cmd.map NotFoundPageMsg)
 
 {-| Tags the MainMenu command.
 -}
 mapMainMenu: (a, Cmd MainMenu.Msg) -> (a, Cmd Msg)
 mapMainMenu =
-  mapSnd (Cmd.map MainMenuMsg)
+  mapSecond (Cmd.map MainMenuMsg)

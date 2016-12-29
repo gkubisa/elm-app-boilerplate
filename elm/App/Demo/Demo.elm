@@ -1,6 +1,7 @@
 module App.Demo.Demo exposing
-  ( init, update, urlUpdate, view, subscriptions
-  , Model, Msg
+  ( Model, Msg
+  , init, update, view, subscriptions
+  , routeChanged
   )
 
 {-| The main demo component. Handles the demo section routing.
@@ -14,7 +15,11 @@ type Model = Model
   }
 
 type Msg =
-  Noop
+  RouteChanged Route
+
+routeChanged: Route -> Msg
+routeChanged route =
+  RouteChanged route
 
 init : Route -> (Model, Cmd Msg)
 init route =
@@ -26,13 +31,11 @@ init route =
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg (Model model) =
-  ( Model model, Cmd.none )
-
-urlUpdate : Route -> Model -> (Model, Cmd Msg)
-urlUpdate route (Model model) =
-  ( Model { model | routeModel = route }
-  , Cmd.none
-  )
+  case msg of
+    RouteChanged route ->
+      ( Model { model | routeModel = route }
+      , Cmd.none
+      )
 
 view : Model -> Html Msg
 view (Model model) =

@@ -1,10 +1,10 @@
 port module TestRunner exposing (..)
 
 import Json.Encode exposing (Value)
-import Test.Runner.Node exposing (run)
+import Test.Runner.Node exposing (TestProgram, run)
 import Tests
 
-main: Program Value
+main: TestProgram
 main =
   run emit Tests.testSuite
 

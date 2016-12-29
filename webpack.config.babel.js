@@ -30,7 +30,7 @@ const config = {
     loaders: [
       { test: /\.js$/, include: [jsDir], loader: 'babel-loader' },
       { test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?)$/, loader: 'url-loader?limit=8192' },
-      { test: /\.elm$/, include: [elmDir], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?verbose&warn&pathToMake=node_modules/.bin/elm-make' }
+      { test: /\.elm$/, include: [elmDir], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?verbose=true&warn=true&debug=true&pathToMake=node_modules/.bin/elm-make' }
     ]
   },
 

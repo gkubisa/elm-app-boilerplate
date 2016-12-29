@@ -1,16 +1,14 @@
 import Navigation
 import App.App as App
-import App.AppRoute as AppRoute
 
 {-| Entry point to the application.
 -}
 
-main : Program Never
+main : Program Never App.Model App.Msg
 main =
-  Navigation.program AppRoute.urlParser
+  Navigation.program App.locationChanged
     { init = App.init
     , view = App.view
     , update = App.update
-    , urlUpdate = App.urlUpdate
     , subscriptions = App.subscriptions
     }
