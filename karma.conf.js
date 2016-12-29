@@ -40,8 +40,8 @@ module.exports = function (config) {
       devtool: 'inline-source-map',
       module: {
         loaders: [
-          {test: /\.js$/, include: [jsTestDir], loader: 'babel'}, // ES6
-          {test: /\.js$/, include: [jsDir], loader: 'isparta'}, // ES6 + coverage
+          // ES6
+          {test: /\.js$/, include: [jsDir, jsTestDir], loader: 'babel'},
 
           // eslint
           {test: /\.js$/, include: [jsTestDir], loader: 'eslint-loader?{configFile:".eslintrc.test.yml"}'},

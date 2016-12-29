@@ -1,6 +1,11 @@
-import ElmTest exposing (runSuite)
-import Tests exposing (testSuite)
+port module TestRunner exposing (..)
 
-main : Program Never
+import Json.Encode exposing (Value)
+import Test.Runner.Node exposing (TestProgram, run)
+import Tests
+
+main: TestProgram
 main =
-  runSuite testSuite
+  run emit Tests.testSuite
+
+port emit: (String, Value) -> Cmd msg

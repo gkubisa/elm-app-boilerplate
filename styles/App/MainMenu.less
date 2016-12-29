@@ -1,0 +1,81 @@
+@import (multiple) '../Config';
+@import (multiple) '../Util';
+
+@MainMenu-primaryColor: @primaryColor;
+@MainMenu-textColor: @textPrimaryColor;
+@MainMenu-activeColor: @darkPrimaryColor;
+
+
+// MainMenu
+.MainMenu {
+  background-color: @MainMenu-primaryColor;
+  margin: 0;
+  padding: 0;
+}
+
+
+// MainMenu_itemList
+.MainMenu_itemList {
+  display: none;
+  padding: 0 0 0 1rem;
+  margin: 0;
+}
+
+.MainMenu_itemList-level1 {
+  display: block;
+  padding: 0;
+  & > .MainMenu_item > .MainMenu_itemContent {
+    display: none;
+  }
+}
+
+.MainMenu_itemList-level2 {
+  display: block;
+  padding: 0;
+  & > .MainMenu_item {
+    float: left;
+  }
+  &:after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+}
+
+.MainMenu_itemList-level3 {
+  padding: 0;
+  width: 0;
+}
+
+
+// MainMenu_item
+.MainMenu_item {
+  list-style: none;
+}
+
+.MainMenu_item-active {
+  & > .MainMenu_itemContent {
+    background-color: @MainMenu-activeColor;
+  }
+}
+
+.MainMenu_item-expanded {
+  & > .MainMenu_itemList {
+    display: block;
+  }
+}
+
+
+// MainMenu_itemContent
+.MainMenu_itemContent {
+  background-color: transparent;
+  border: 0;
+  padding: 0.6rem 0.4em;
+  display: inline-block;
+  text-decoration: none;
+  color: @MainMenu-textColor;
+  white-space: nowrap;
+  &:hover {
+    .highlight();
+  }
+}

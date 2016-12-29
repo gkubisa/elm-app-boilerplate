@@ -1,11 +1,13 @@
 module Tests exposing (testSuite)
 
-import ElmTest exposing (Test, suite)
-import String
-import App.SampleTest
+import Test exposing (Test, describe)
+
+import App.AppRouteTest as AppRouteTest
+import App.Widget.MenuTest as MenuTest
 
 testSuite : Test
 testSuite =
-  suite "All tests"
-    [ App.SampleTest.testSuite
+  describe "elm-app-boilerplate"
+    [ AppRouteTest.testSuite
+    , MenuTest.testSuite
     ]

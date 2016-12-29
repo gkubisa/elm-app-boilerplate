@@ -1,0 +1,47 @@
+@import (multiple) '../Config';
+
+.App {
+  min-width: @screen-xx-small;
+}
+
+.App_header {
+  background-color: @primaryColor;
+}
+
+.App_heading {
+  font-size: @font-large;
+  line-height: 2;
+  text-align: center;
+  margin: 0;
+  color: @textPrimaryColor;
+  background-color: @darkPrimaryColor;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.App_navigation {
+}
+
+.App_main {
+  padding: 0 0.4rem;
+  color: @primaryTextColor;
+
+  h1 {
+    font-size: @font-xx-large;
+  }
+
+  a {
+    color: @secondaryTextColor;
+  }
+}
+
+.App_footer {
+  padding: 1rem 0.4rem;
+  background-color: @primaryColor;
+  color: @textPrimaryColor;
+  a {
+    color: inherit;
+  }
+}
