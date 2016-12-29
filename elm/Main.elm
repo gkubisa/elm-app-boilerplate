@@ -1,3 +1,5 @@
+module Main exposing (main)
+
 import Navigation
 import App.App as App
 
