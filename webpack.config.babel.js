@@ -65,7 +65,7 @@ if (START) {
 if (BUILD) {
   // put styles in a separate file
   config.module.loaders.push({ test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css!postcss-loader!less') })
-  config.plugins.push(new ExtractTextPlugin('[hash].css'))
+  config.plugins.push(new ExtractTextPlugin('/[hash].css'))
 
   // disable UglifyJs warnings
   config.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false }}))
