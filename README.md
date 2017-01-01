@@ -13,7 +13,6 @@ Provides an efficient development workflow and a starting point for building Elm
 - test coverage using [istanbul](https://github.com/gotwarlost/istanbul) for the JavaScript tests
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
 - JavaScript linted using [eslint](http://eslint.org/)
-- building and running a [Docker](https://www.docker.com/) image
 - continuous integration and deployment based on [Shippable](https://app.shippable.com/)
 - dependency checking using [npm-check-updates](https://github.com/tjunnone/npm-check-updates)
 
@@ -61,16 +60,7 @@ The deployment is automated using Shippable and is triggered as follows:
 1. Run `npm version [major|minor|patch]` on the `master` branch.
 2. Add release notes in GitHub.
 
-On success:
-
-- a new docker image is pushed to [elm-app-boilerplate on Docker Hub](https://hub.docker.com/r/gkubisa/elm-app-boilerplate/)
-- the demo app is deployed to [elm-app-boilerplate GitHub Pages](http://gkubisa.github.io/elm-app-boilerplate/)
-
-### Custom Deployments
-
-Consider using `npm run release` as a base - it builds the app, creates a docker image, and then tags and pushes it to Docker Hub.
-
-Alternatively use the output of the `npm run build` command which stores all the optimized application files in `./dist`.
+On success, the demo app is deployed to [elm-app-boilerplate GitHub Pages](http://gkubisa.github.io/elm-app-boilerplate/).
 
 
 ## Updating Version
@@ -139,36 +129,3 @@ The parameters to those commands must be specified after `--`, for example: `npm
 ### HTML
 
 - `html/index.html` - overall application entry point
-
-### Docker
-
-- `Dockerfile` - instructions for building a docker image
-- `config` - configuration for the services embedded in the docker image
-
-
-## Docker
-
-This section describes the Docker-related commands which are used by the Shippable continuous integration and deployment process. Docker version 1.11.1 or later is required.
-
-Creating a docker image containing a copy of the `./dist` directory which is served by [nginx](https://www.nginx.com/) on port 80:
-
-```
-npm run docker-build
-```
-
-Pushing the created docker image to Docker Hub with the tag `latest`:
-
-```
-npm run docker-push
-```
-
-Testing the created docker image locally:
-
-```
-npm run docker-run # creates and starts a Docker container
-# the app is now available at http://localhost:8081
-
-npm run docker-start # starts an existing container
-npm run docker-stop # stops an existing container
-npm run docker-rm # removes an existing, stopped container
-```

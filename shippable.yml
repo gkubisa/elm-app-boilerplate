@@ -13,7 +13,7 @@ build:
   post_ci:
     - >-
        if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then
-       shippable_retry npm run release &&
+       npm run build &&
        git clone . /tmp/demo &&
        cd /tmp/demo &&
        git remote set-url origin git@github.com:${REPO_FULL_NAME}.git &&
@@ -33,8 +33,3 @@ build:
     - $SHIPPABLE_BUILD_DIR/node_modules
     - $SHIPPABLE_BUILD_DIR/elm-stuff
     - $SHIPPABLE_BUILD_DIR/.git
-
-integrations:
-  hub:
-    - integrationName: docker-hub
-      type: docker
