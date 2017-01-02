@@ -39,10 +39,6 @@ const config = {
       template: 'html/index.html',
       inject: 'body',
       minify: require('./html-minifier.json')
-    }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
     })
   ],
 
