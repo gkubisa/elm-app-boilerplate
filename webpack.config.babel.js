@@ -18,9 +18,9 @@ const config = {
 
   output: {
     path: './dist',
-    filename: '/[hash].js',
-    hotUpdateChunkFilename: '/[id].[hash].hot-update.js',
-    hotUpdateMainFilename: '/[hash].hot-update.json'
+    filename: process.env.BASE_PATH + '/[hash].js',
+    hotUpdateChunkFilename: process.env.BASE_PATH + '/[id].[hash].hot-update.js',
+    hotUpdateMainFilename: process.env.BASE_PATH + '/[hash].hot-update.json'
   },
 
   resolve: {
@@ -71,7 +71,7 @@ if (START) {
 if (BUILD) {
   // put styles in a separate file
   config.module.loaders.push({ test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css!postcss-loader!less') })
-  config.plugins.push(new ExtractTextPlugin('/[hash].css'))
+  config.plugins.push(new ExtractTextPlugin(process.env.BASE_PATH + '/[hash].css'))
 
   // disable UglifyJs warnings
   config.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false }}))
