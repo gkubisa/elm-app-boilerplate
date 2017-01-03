@@ -18,7 +18,9 @@ const config = {
 
   output: {
     path: './dist',
-    filename: '/[hash].js'
+    filename: '/[hash].js',
+    hotUpdateChunkFilename: '/[id].[hash].hot-update.js',
+    hotUpdateMainFilename: '/[hash].hot-update.json'
   },
 
   resolve: {
