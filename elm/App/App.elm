@@ -7,6 +7,7 @@ module App.App exposing
 {-| The main application component. Handles the top level routing.
 -}
 
+import App.Config exposing (AppConfig)
 import App.HomePage as HomePage
 import App.NotFoundPage as NotFoundPage
 import App.Demo.Demo as Demo
@@ -25,6 +26,7 @@ type Model = Model
   { routeModel: RouteModel
   , mainMenu: MainMenu.Model
   , location: Location
+  , appConfig: AppConfig
   }
 
 type RouteModel =
@@ -44,10 +46,11 @@ locationChanged: Location -> Msg
 locationChanged location =
   LocationChanged location
 
-init: Location -> (Model, Cmd Msg)
-init location =
+init: AppConfig -> Location -> (Model, Cmd Msg)
+init appConfig location =
   let
-    maybeRoute = UrlParser.parsePath AppRoute.pathnameParser location
+    parser = AppRoute.pathnameParser appConfig.basePath
+    maybeRoute = UrlParser.parsePath parser location
 
     (routeModel, routeCmd) = case maybeRoute of
       Just route ->
@@ -59,12 +62,13 @@ init location =
       Nothing ->
         mapNotFound <| NotFoundPage.init location
 
-    (menuModel, menuCmd) = mapMainMenu MainMenu.init
+    (menuModel, menuCmd) = mapMainMenu <| MainMenu.init appConfig
 
     model =
       { routeModel = routeModel
       , mainMenu = menuModel
       , location = location
+      , appConfig = appConfig
       }
 
     cmd = Cmd.batch [ routeCmd, menuCmd ]
@@ -96,7 +100,9 @@ update msg (Model model) =
           (Model model, Cmd.none)
     LocationChanged location ->
       let
-        maybeRoute = UrlParser.parsePath AppRoute.pathnameParser location
+        parser = AppRoute.pathnameParser model.appConfig.basePath
+        maybeRoute = UrlParser.parsePath parser location
+
         (routeModel, routeCmd) = case maybeRoute of
           Just route ->
             case route of
@@ -124,6 +130,8 @@ update msg (Model model) =
 view: Model -> Html Msg
 view (Model model) =
   let
+    routeToString = AppRoute.toString model.appConfig.basePath
+
     mainMenu =
       Html.map MainMenuMsg <| lazy2 MainMenu.view model.mainMenu model.location.pathname
 
@@ -142,7 +150,7 @@ view (Model model) =
       ]
       [ header [ class "App_header" ]
           [ h1 [ class "App_heading" ]
-              [ a [ href "/" ] [ text "elm-app-boilerplate" ] ]
+              [ a [ href <| routeToString AppRoute.HomeRoute ] [ text "elm-app-boilerplate" ] ]
           , nav [ class "App_navigation" ]
               [ mainMenu ]
           ]

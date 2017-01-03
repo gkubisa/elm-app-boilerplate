@@ -3,7 +3,7 @@ module App.Demo.DemoRoute exposing
   , pathnameParser, toPathnameFragment
   )
 
-import UrlParser exposing (map, s, oneOf, (</>))
+import UrlParser exposing (map, s, oneOf, top, (</>))
 
 type Route =
     DemoRoute
@@ -14,10 +14,10 @@ type Route =
 pathnameParser: UrlParser.Parser (Route -> a) a
 pathnameParser =
   oneOf
-    [ map AccordionDemoRoute (s "accordion")
+    [ map DemoRoute top
+    , map AccordionDemoRoute (s "accordion")
     , map CheckboxDemoRoute (s "checkbox")
     , map OtherDemoRoute (s "other")
-    , map DemoRoute (s "")
     ]
 
 toPathnameFragment: Route -> String
@@ -26,8 +26,8 @@ toPathnameFragment route =
     DemoRoute ->
       ""
     AccordionDemoRoute ->
-      "accordion"
+      "/accordion"
     CheckboxDemoRoute ->
-      "checkbox"
+      "/checkbox"
     OtherDemoRoute ->
-      "other"
+      "/other"

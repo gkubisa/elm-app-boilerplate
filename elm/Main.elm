@@ -2,13 +2,14 @@ module Main exposing (main)
 
 import Navigation
 import App.App as App
+import App.Config exposing (AppConfig)
 
 {-| Entry point to the application.
 -}
 
-main : Program Never App.Model App.Msg
+main : Program AppConfig App.Model App.Msg
 main =
-  Navigation.program App.locationChanged
+  Navigation.programWithFlags App.locationChanged
     { init = App.init
     , view = App.view
     , update = App.update

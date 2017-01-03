@@ -3,6 +3,9 @@ import webpack from 'webpack'
 import autoprefixer from 'autoprefixer'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
@@ -39,6 +42,11 @@ const config = {
       template: 'html/index.html',
       inject: 'body',
       minify: require('./html-minifier.json')
+    }),
+    new webpack.DefinePlugin({
+      '__CONFIG__': {
+        basePath: JSON.stringify(process.env.BASE_PATH)
+      }
     })
   ],
 

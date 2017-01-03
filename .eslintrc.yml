@@ -8,6 +8,9 @@ extends:
 env:
   browser: true
 
+globals:
+  __CONFIG__: false
+
 parserOptions:
   ecmaFeatures:
     arrowFunctions: true

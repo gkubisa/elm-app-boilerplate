@@ -1,17 +1,16 @@
 module App.AppRoute exposing
   ( Route(..)
   , pathnameParser, toPathnameFragment
-  , toUrl, toString
+  , toString
   , newRoute, modifyRoute
   , onNavigate
   )
 
 import Navigation exposing (Location)
-import UrlParser exposing (map, s, oneOf, (</>))
+import UrlParser exposing (map, s, oneOf, top, (</>))
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions, defaultOptions)
 import Json.Decode as JD
-import Erl
 import App.Demo.DemoRoute as DemoRoute
 
 type Route =
@@ -20,12 +19,23 @@ type Route =
 
 {-| A parser which turns `Location.pathname` into a `Route`.
 -}
-pathnameParser: UrlParser.Parser (Route -> a) a
-pathnameParser =
-  oneOf
-    [ map DemoRoute (s "demo" </> DemoRoute.pathnameParser)
-    , map HomeRoute (s "")
-    ]
+pathnameParser: String -> UrlParser.Parser (Route -> a) a
+pathnameParser basePath =
+  let
+    basePathParser =
+      List.foldr (</>) top
+        << List.map s
+        << List.filter ((/=) "")
+        << String.split "/"
+        <| basePath
+
+    routePathParser =
+      oneOf
+        [ map HomeRoute top
+        , map DemoRoute (s "demo" </> DemoRoute.pathnameParser)
+        ]
+  in
+    basePathParser </> routePathParser
 
 toPathnameFragment: Route -> String
 toPathnameFragment route =
@@ -33,42 +43,31 @@ toPathnameFragment route =
     HomeRoute ->
       "/"
     DemoRoute _ ->
-      "/demo/"
-
-{-| Converts the specified `Route` to a `Url`
--}
-toUrl: Route -> Erl.Url
-toUrl route =
-  let
-    basePath = toPathnameFragment route
-    fullPath =
-      case route of
-        DemoRoute demoRoute ->
-          basePath ++ DemoRoute.toPathnameFragment demoRoute
-        _ ->
-          basePath
-  in
-    Erl.parse fullPath
+      "/demo"
 
 {-| Converts the specified `Route` to a URL represented as a `String`.
 -}
-toString: Route -> String
-toString =
-  Erl.toString << toUrl
+toString: String -> Route -> String
+toString basePath route =
+  basePath ++ toPathnameFragment route ++ case route of
+    DemoRoute demoRoute ->
+      DemoRoute.toPathnameFragment demoRoute
+    _ ->
+      ""
 
 {-| Navigates to the specified route creating a new entry in the browser
 history.
 -}
-newRoute: Route -> Cmd msg
-newRoute =
-  Navigation.newUrl << toString
+newRoute: String -> Route -> Cmd msg
+newRoute basePath =
+  Navigation.newUrl << toString basePath
 
 {-| Navigates to the specified route modifying the current entry in the browser
 history.
 -}
-modifyRoute: Route -> Cmd msg
-modifyRoute =
-  Navigation.modifyUrl << toString
+modifyRoute: String -> Route -> Cmd msg
+modifyRoute basePath =
+  Navigation.modifyUrl << toString basePath
 
 {-| Emits a custom message for navigation within the specified `origin`,
 triggered by activating an anchor tag.
