@@ -63,6 +63,21 @@ The deployment is automated using Shippable and is triggered as follows:
 On success, the demo app is deployed to [elm-app-boilerplate GitHub Pages](http://gkubisa.github.io/elm-app-boilerplate/).
 
 
+## Build Configuration Using Environment Variables
+
+The default environment variables used by the build scripts are defined in the `.env` file. The defaults are always overridden by the variables defined in the environment. They are useful for abstracting away the differences between the development and production platforms. For example, the following command builds the application with a custom `BASE_PATH` suitable for deployment to GitHub Project Pages.
+
+```
+BASE_PATH=/elm-app-boilerplate npm run build
+```
+
+The environment variables are first available to the `webpack.config.babel.js` script, so that the build itself can be parameterized. From there, the variables can be passed to JavaScript using [DefinePlugin](https://webpack.github.io/docs/list-of-plugins.html#defineplugin), and from JavaScript to Elm using [flags](http://package.elm-lang.org/packages/elm-lang/html/1.1.0/Html-App#programWithFlags).
+
+Currently the following variables are supported:
+
+- `BASE_PATH` - defines the location of the generated JS and CSS files, and is prepended to all pathnames handled by the Elm application.
+
+
 ## Updating Version
 
 This project customizes the standard `npm version` script to also:
@@ -104,10 +119,14 @@ The parameters to those commands must be specified after `--`, for example: `npm
 
 ### General
 
+- `.editorconfig` - configures the white space rules for text editors
+- `.env` - defines the default environment variables used by `webpack`
+- `.gitignore` - defines files and directories ignored by `git` 
+- `.npmrc` - configuration for `npm`, currently used to provide a message template for `npm version`
 - `package.json` - defines dependencies and scripts for building, testing and running the application
-- `dist/` - built application artifacts produced by `npm run build`
-- `coverage/` - JavaScript test coverage reports
 - `shippable.yml` - configuration of the continuous integration and deployment process based on Shippable
+- `webpack.config.babel.js` - webpack configuration used for building and running the application
+- `dist/` - built application artifacts produced by `npm run build`
 
 ### Elm
 
@@ -121,6 +140,11 @@ The parameters to those commands must be specified after `--`, for example: `npm
 
 ### JavaScript
 
+- `.babelrc` - configures the JavaScript babel transpiler
+- `.eslintrc.test.yml` - eslint config for JavaScript tests
+- `.eslintrc.yml` - eslint config for JavaScript application code
+- `karma.conf.js` - Krama configuration used for running the JavaScript tests in a browser
+- `coverage/` - JavaScript test coverage reports
 - `js/` - contains all application JavaScript code
 - `js/main.js` - entry point to the application JavaScript code
 - `js-test/` - directory containing all JavaScript tests
@@ -128,4 +152,13 @@ The parameters to those commands must be specified after `--`, for example: `npm
 
 ### HTML
 
+- `html-minifier.json` - configuration file used by the `html-minifier`
 - `html/index.html` - overall application entry point
+
+### Styles
+
+- `styles/App/` - contains styles for all components
+- `styles/Config.less` - global LESS variables defining things like the color scheme, breakpoints for media queries, font sizes, etc
+- `styles/Global.less` - some universally applicable styles for HTML elements
+- `styles/Main.less` - the entry point for the LESS compiler
+- `styles/Util.less` - reusable LESS mixins
