@@ -3,6 +3,7 @@ import webpack from 'webpack'
 import autoprefixer from 'autoprefixer'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import WebpackStableModuleIdAndHash from 'webpack-stable-module-id-and-hash'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -18,7 +19,7 @@ const config = {
 
   output: {
     path: './dist',
-    filename: process.env.BASE_PATH + '/[hash].js',
+    filename: process.env.BASE_PATH + '/[name].[hash].js',
     hotUpdateChunkFilename: process.env.BASE_PATH + '/[id].[hash].hot-update.js',
     hotUpdateMainFilename: process.env.BASE_PATH + '/[hash].hot-update.json'
   },
@@ -30,12 +31,27 @@ const config = {
   module: {
     noParse: /\.elm$/,
     preLoaders: [
-      { test: /\.js$/, include: [jsDir], loader: 'eslint-loader' }
+      {
+        test: /\.js$/,
+        include: [jsDir],
+        loader: 'eslint-loader'
+      }
     ],
     loaders: [
-      { test: /\.js$/, include: [jsDir], loader: 'babel-loader' },
-      { test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?)$/, loader: 'url-loader?limit=8192' },
-      { test: /\.elm$/, include: [elmDir], loader: (START ? 'elm-hot!' : '') + 'elm-webpack?verbose=true&warn=true&debug=true&pathToMake=node_modules/.bin/elm-make' }
+      {
+        test: /\.js$/,
+        include: [jsDir],
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?)$/,
+        loader: 'url-loader?limit=8192'
+      },
+      {
+        test: /\.elm$/,
+        include: [elmDir],
+        loader: `${START ? 'elm-hot!' : ''}elm-webpack?verbose=true&warn=true${START ? '&debug=true' : ''}&pathToMake=node_modules/.bin/elm-make`
+      }
     ]
   },
 
@@ -69,9 +85,14 @@ if (START) {
   config.module.loaders.push({ test: /\.less$/, loader: 'style!css!postcss-loader!less' })
 }
 if (BUILD) {
+  config.output.filename = config.output.filename.replace('[hash]', '[chunkhash]')
+
   // put styles in a separate file
   config.module.loaders.push({ test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css!postcss-loader!less') })
-  config.plugins.push(new ExtractTextPlugin(process.env.BASE_PATH + '/[hash].css'))
+  config.plugins.push(new ExtractTextPlugin(process.env.BASE_PATH + '/[name].[contenthash].css'))
+
+  // ensure the JS file 'chunkhash' does not change when only the styles change
+  config.plugins.push(new WebpackStableModuleIdAndHash())
 
   // disable UglifyJs warnings
   config.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false }}))
