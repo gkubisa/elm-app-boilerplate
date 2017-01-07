@@ -6,7 +6,11 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import WebpackStableModuleIdAndHash from 'webpack-stable-module-id-and-hash'
 import dotenv from 'dotenv'
 
-dotenv.config()
+const dotenvError = dotenv.config().error
+
+if (dotenvError) {
+  throw dotenvError
+}
 
 const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
