@@ -16,6 +16,10 @@ const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
 
 const jsDir = path.resolve(__dirname, 'js') + '/'
+const jsTestFiles = [
+  path.join(jsDir, 'tests.js'),
+  /\.test.js$/
+]
 
 const config = {
   entry: './js/main.js',
@@ -37,6 +41,7 @@ const config = {
       {
         test: /\.js$/,
         include: [jsDir],
+        exclude: jsTestFiles,
         loader: 'eslint-loader'
       }
     ],
@@ -44,6 +49,7 @@ const config = {
       {
         test: /\.js$/,
         include: [jsDir],
+        exclude: jsTestFiles,
         loader: 'babel-loader'
       },
       {

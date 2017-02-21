@@ -144,10 +144,9 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `.eslintrc.yml` - eslint config for JavaScript application code
 - `karma.conf.js` - Krama configuration used for running the JavaScript tests in a browser
 - `coverage/` - JavaScript test coverage reports
-- `js/` - contains all application JavaScript code
+- `js/` - contains JavaScript code
 - `js/main.js` - entry point to the application JavaScript code
-- `js-test/` - directory containing all JavaScript tests
-- `js-test/test.js` - entry point for JavaScript tests - automatically loads all `*.test.js` files in `js-test`
+- `js/tests.js` - entry point for JavaScript tests - automatically loads all `*.test.js` files in `js/`
 
 ### HTML
 

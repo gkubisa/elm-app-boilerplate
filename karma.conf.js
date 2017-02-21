@@ -1,7 +1,11 @@
 const path = require('path')
 
 const jsDir = path.resolve(__dirname, 'js') + '/'
-const jsTestDir = path.resolve(__dirname, 'js-test') + '/'
+const jsTestFiles = [
+  path.join(jsDir, 'tests.js'),
+  /\.test.js$/
+]
+
 
 module.exports = function (config) {
   config.set({
@@ -14,7 +18,7 @@ module.exports = function (config) {
 
     // list of files/patterns to load in the browser
     files: [
-      {pattern: 'js-test/tests.js', watched: false}
+      {pattern: 'js/tests.js', watched: false}
     ],
 
     // files to exclude
@@ -34,18 +38,18 @@ module.exports = function (config) {
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {'js-test/tests.js': ['webpack', 'sourcemap']},
+    preprocessors: {'js/tests.js': ['webpack', 'sourcemap']},
 
     webpack: {
       devtool: 'inline-source-map',
       module: {
         loaders: [
           // ES6
-          {test: /\.js$/, include: [jsDir, jsTestDir], loader: 'babel'},
+          {test: /\.js$/, include: [jsDir], loader: 'babel'},
 
           // eslint
-          {test: /\.js$/, include: [jsTestDir], loader: 'eslint-loader?{configFile:".eslintrc.test.yml"}'},
-          {test: /\.js$/, include: [jsDir], loader: 'eslint-loader?{configFile:".eslintrc.yml"}' },
+          {test: /\.js$/, include: jsTestFiles, loader: 'eslint-loader?{configFile:".eslintrc.test.yml"}'},
+          {test: /\.js$/, include: [jsDir], exclude: jsTestFiles, loader: 'eslint-loader?{configFile:".eslintrc.yml"}' },
 
           // don't bother loading these properly for unit tests
           {test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?|less)$/, loader: 'raw'}
