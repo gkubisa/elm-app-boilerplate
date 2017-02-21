@@ -5,7 +5,6 @@
     "license": "MIT",
     "source-directories": [
         "elm",
-        "elm-test",
         "node_modules/elm-test/src"
     ],
     "exposed-modules": [],

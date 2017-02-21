@@ -134,9 +134,8 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `elm/` - Elm source files
 - `elm/Main.elm` - Elm application entry point
 - `elm/App/` - the namespace for all application Elm modules
-- `elm-test/` - directory containing all Elm tests
-- `elm-test/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
-- `elm-test/Tests.elm` - the main file loading and exposing all the test suites
+- `elm/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
+- `elm/Tests.elm` - the main file loading and exposing all the test suites
 
 ### JavaScript
 
