@@ -15,7 +15,6 @@ if (dotenvError) {
 const START = process.env.npm_lifecycle_event === 'start'
 const BUILD = process.env.npm_lifecycle_event === 'build'
 
-const elmDir = path.resolve(__dirname, 'elm') + '/'
 const jsDir = path.resolve(__dirname, 'js') + '/'
 
 const config = {
@@ -33,7 +32,7 @@ const config = {
   },
 
   module: {
-    noParse: /\.elm$/,
+    noParse: /\/Main\.elm$/,
     preLoaders: [
       {
         test: /\.js$/,
@@ -52,8 +51,7 @@ const config = {
         loader: 'url-loader?limit=8192'
       },
       {
-        test: /\.elm$/,
-        include: [elmDir],
+        test: /\/Main\.elm$/,
         loader: `${START ? 'elm-hot!' : ''}elm-webpack?verbose=true&warn=true${START ? '&debug=true' : ''}&pathToMake=node_modules/.bin/elm-make`
       }
     ]
