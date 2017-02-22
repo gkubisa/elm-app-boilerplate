@@ -2,7 +2,7 @@ port module TestRunner exposing (..)
 
 import Json.Encode exposing (Value)
 import Test.Runner.Node exposing (TestProgram, run)
-import Tests
+import App.Etc.Tests as Tests
 
 main: TestProgram
 main =

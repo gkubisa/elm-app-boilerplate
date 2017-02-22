@@ -133,9 +133,16 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `elm-package.json` - describes the Elm application and its dependencies
 - `elm/` - Elm source files
 - `elm/Main.elm` - Elm application entry point
-- `elm/App/` - the namespace for all application Elm modules
 - `elm/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
-- `elm/Tests.elm` - the main file loading and exposing all the test suites
+- `elm/App/` - the namespace for all application Elm modules
+- `elm/App/Etc/` - contains configuration modules
+- `elm/App/Etc/Tests.elm` - the main file loading and exposing all the test suites
+- `elm/App/Etc/Config.elm` - the Elm app configuration
+- `elm/App/Section/` - contains all sections. A section groups related pages and manages routing within its group.
+- `elm/App/Section/<SomeSection>/Route.elm` - contains route mappings and helpers for `<SomeSection>`
+- `elm/App/Page/` - contains all pages. A page is responsible for the main content of its section.
+- `elm/App/Widget/` - contains all reusable widgets
+- `elm/App/**/<SomeModule>/Test.elm` - contains tests for `<SomeModule>`
 
 ### JavaScript
 

@@ -1,4 +1,4 @@
-module App.NotFoundPage exposing
+module App.Page.NotFound exposing
   ( init, view
   , Model, Msg
   )

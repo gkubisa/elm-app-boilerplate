@@ -1,17 +1,17 @@
 module Main exposing (main)
 
 import Navigation
-import App.App as App
-import App.Config exposing (AppConfig)
+import App.Section.Root as Root
+import App.Etc.Config exposing (AppConfig)
 
 {-| Entry point to the application.
 -}
 
-main : Program AppConfig App.Model App.Msg
+main : Program AppConfig Root.Model Root.Msg
 main =
-  Navigation.programWithFlags App.locationChanged
-    { init = App.init
-    , view = App.view
-    , update = App.update
-    , subscriptions = App.subscriptions
+  Navigation.programWithFlags Root.locationChanged
+    { init = Root.init
+    , view = Root.view
+    , update = Root.update
+    , subscriptions = Root.subscriptions
     }

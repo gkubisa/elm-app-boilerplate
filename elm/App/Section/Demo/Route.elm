@@ -1,4 +1,4 @@
-module App.Demo.DemoRoute exposing
+module App.Section.Demo.Route exposing
   ( Route(..)
   , pathnameParser, toPathnameFragment
   )

@@ -1,4 +1,4 @@
-module App.HomePage exposing
+module App.Page.Home exposing
   ( init, view
   , Model, Msg
   )

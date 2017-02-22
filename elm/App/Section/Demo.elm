@@ -1,4 +1,4 @@
-module App.Demo.Demo exposing
+module App.Section.Demo exposing
   ( Model, Msg
   , init, update, view, subscriptions
   , routeChanged
@@ -8,7 +8,7 @@ module App.Demo.Demo exposing
 -}
 
 import Html exposing (Html, section, h1, p, text)
-import App.Demo.DemoRoute exposing (Route(..))
+import App.Section.Demo.Route exposing (Route(..))
 
 type Model = Model
   { routeModel: Route

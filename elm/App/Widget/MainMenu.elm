@@ -1,11 +1,11 @@
-module App.MainMenu exposing
+module App.Widget.MainMenu exposing
   ( init, update, view
   , Model, Msg )
 
 import Html exposing (Html)
-import App.AppRoute as AppRoute
-import App.Config exposing (AppConfig)
-import App.Demo.DemoRoute as DemoRoute
+import App.Section.Root.Route as RootRoute
+import App.Etc.Config exposing (AppConfig)
+import App.Section.Demo.Route as DemoRoute
 import App.Widget.Menu as Menu exposing
   (navigationLink, parentItem)
 
@@ -20,21 +20,21 @@ menuConfig = Menu.customConfig "MainMenu"
 init: AppConfig -> (Model, Cmd Msg)
 init appConfig =
   let
-    routeToString = AppRoute.toString appConfig.basePath
+    routeToString = RootRoute.toString appConfig.basePath
   in
     Menu.init
       [ parentItem "Root Item"
           [ navigationLink "Home"
-              (routeToString AppRoute.HomeRoute)
+              (routeToString RootRoute.HomeRoute)
           , parentItem "Demo"
               [ navigationLink "Demo Overview"
-                  (routeToString <| AppRoute.DemoRoute DemoRoute.DemoRoute)
+                  (routeToString <| RootRoute.DemoRoute DemoRoute.DemoRoute)
               , navigationLink "Accordion Demo"
-                  (routeToString <| AppRoute.DemoRoute DemoRoute.AccordionDemoRoute)
+                  (routeToString <| RootRoute.DemoRoute DemoRoute.AccordionDemoRoute)
               , navigationLink "Checkbox Demo"
-                  (routeToString <| AppRoute.DemoRoute DemoRoute.CheckboxDemoRoute)
+                  (routeToString <| RootRoute.DemoRoute DemoRoute.CheckboxDemoRoute)
               , navigationLink "Other Demo"
-                  (routeToString <| AppRoute.DemoRoute DemoRoute.OtherDemoRoute)
+                  (routeToString <| RootRoute.DemoRoute DemoRoute.OtherDemoRoute)
               ]
           , parentItem "Resources"
               [ navigationLink "Fork it on GitHub"

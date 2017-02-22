@@ -1,4 +1,4 @@
-module App.App exposing
+module App.Section.Root exposing
   ( Model, Msg
   , init, update, view, subscriptions
   , locationChanged
@@ -7,12 +7,12 @@ module App.App exposing
 {-| The main application component. Handles the top level routing.
 -}
 
-import App.Config exposing (AppConfig)
-import App.HomePage as HomePage
-import App.NotFoundPage as NotFoundPage
-import App.Demo.Demo as Demo
-import App.AppRoute as AppRoute exposing (Route(..), onNavigate)
-import App.MainMenu as MainMenu
+import App.Etc.Config exposing (AppConfig)
+import App.Page.Home as HomePage
+import App.Page.NotFound as NotFoundPage
+import App.Section.Demo as Demo
+import App.Section.Root.Route as RootRoute exposing (Route(..), onNavigate)
+import App.Widget.MainMenu as MainMenu
 import Html exposing
   (div, header, footer, main_, section, nav, h1, h2, a, text, Html)
 import Html.Attributes exposing (class, href)
@@ -49,7 +49,7 @@ locationChanged location =
 init: AppConfig -> Location -> (Model, Cmd Msg)
 init appConfig location =
   let
-    parser = AppRoute.pathnameParser appConfig.basePath
+    parser = RootRoute.pathnameParser appConfig.basePath
     maybeRoute = UrlParser.parsePath parser location
 
     (routeModel, routeCmd) = case maybeRoute of
@@ -100,7 +100,7 @@ update msg (Model model) =
           (Model model, Cmd.none)
     LocationChanged location ->
       let
-        parser = AppRoute.pathnameParser model.appConfig.basePath
+        parser = RootRoute.pathnameParser model.appConfig.basePath
         maybeRoute = UrlParser.parsePath parser location
 
         (routeModel, routeCmd) = case maybeRoute of
@@ -130,7 +130,7 @@ update msg (Model model) =
 view: Model -> Html Msg
 view (Model model) =
   let
-    routeToString = AppRoute.toString model.appConfig.basePath
+    routeToString = RootRoute.toString model.appConfig.basePath
 
     mainMenu =
       Html.map MainMenuMsg <| lazy2 MainMenu.view model.mainMenu model.location.pathname
@@ -150,7 +150,7 @@ view (Model model) =
       ]
       [ header [ class "App_header" ]
           [ h1 [ class "App_heading" ]
-              [ a [ href <| routeToString AppRoute.HomeRoute ] [ text "elm-app-boilerplate" ] ]
+              [ a [ href <| routeToString RootRoute.HomeRoute ] [ text "elm-app-boilerplate" ] ]
           , nav [ class "App_navigation" ]
               [ mainMenu ]
           ]

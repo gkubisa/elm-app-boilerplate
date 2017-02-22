@@ -1,4 +1,4 @@
-module App.AppRoute exposing
+module App.Section.Root.Route exposing
   ( Route(..)
   , pathnameParser, toPathnameFragment
   , toString
@@ -11,7 +11,7 @@ import UrlParser exposing (map, s, oneOf, top, (</>))
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions, defaultOptions)
 import Json.Decode as JD
-import App.Demo.DemoRoute as DemoRoute
+import App.Section.Demo.Route as DemoRoute
 
 type Route =
     HomeRoute

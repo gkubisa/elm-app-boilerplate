@@ -1,4 +1,4 @@
-module App.Config exposing (AppConfig)
+module App.Etc.Config exposing (AppConfig)
 
 type alias AppConfig =
   { basePath: String
