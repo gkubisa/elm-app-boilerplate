@@ -8,13 +8,15 @@ import Css.File exposing
   , compile
   , compiler
   )
+import Css.Normalize as Normalize
 
 
 port files : CssFileStructure -> Cmd msg
 
 
 stylesheets =
-  [ SectionRoot.css
+  [ Normalize.css
+  , SectionRoot.css
   ]
 
 
