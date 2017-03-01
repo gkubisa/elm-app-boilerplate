@@ -12,14 +12,19 @@ import App.Page.Home as HomePage
 import App.Page.NotFound as NotFoundPage
 import App.Section.Demo as Demo
 import App.Section.Root.Route as RootRoute exposing (Route(..), onNavigate)
+import App.Section.Root.Style as Style
 import App.Widget.MainMenu as MainMenu
 import Html exposing
   (div, header, footer, main_, section, nav, h1, h2, a, text, Html)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (href)
 import Html.Lazy exposing (lazy, lazy2)
 import Navigation exposing (Location, newUrl)
 import Tuple2 exposing (mapEach, mapSecond)
 import UrlParser
+
+
+class : a -> Html.Attribute msg
+class = List.singleton >> .class Style.namespace
 
 
 type Model = Model
@@ -145,19 +150,22 @@ view (Model model) =
           Html.map NotFoundPageMsg <| lazy NotFoundPage.view notFoundModel
   in
     div
-      [ class "App"
+      [ class Style.Root
       , onNavigate model.location.origin Navigate
       ]
-      [ header [ class "App_header" ]
-          [ h1 [ class "App_heading" ]
-              [ a [ href <| routeToString RootRoute.HomeRoute ] [ text "elm-app-boilerplate" ] ]
-          , nav [ class "App_navigation" ]
+      [ header [ class Style.Root_Header ]
+          [ h1 [ class Style.Root_Heading ]
+              [ a [ class Style.Root_Title
+                  , href <| routeToString RootRoute.HomeRoute ]
+                  [ text "elm-app-boilerplate" ]
+              ]
+          , nav [ class Style.Root_Navigation ]
               [ mainMenu ]
           ]
-      , main_ [ class "App_main" ]
+      , main_ [ class Style.Root_Main ]
           [ mainContent
           ]
-      , footer [ class "App_footer" ]
+      , footer [ class Style.Root_Footer ]
           [ a [ href "https://github.com/gkubisa/elm-app-boilerplate" ]
               [ text "Fork it on GitHub" ]
           ]
