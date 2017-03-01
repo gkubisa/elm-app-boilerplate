@@ -76,6 +76,10 @@
   color: @MainMenu-textColor;
   white-space: nowrap;
   &:hover {
-    .highlight();
+    background-color: @MainMenu-activeColor;
+  }
+  &:focus {
+    // causes the outline to display on top of the other items
+    position: relative;
   }
 }

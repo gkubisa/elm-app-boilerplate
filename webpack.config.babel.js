@@ -59,6 +59,10 @@ const config = {
       {
         test: /\/Main\.elm$/,
         loader: `${START ? 'elm-hot!' : ''}elm-webpack?verbose=true&warn=true${START ? '&debug=true' : ''}&pathToMake=node_modules/.bin/elm-make`
+      },
+      {
+        test: /\/Stylesheets\.elm$/,
+        loader: "style!css!elm-css-webpack"
       }
     ]
   },
