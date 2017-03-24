@@ -1,6 +1,7 @@
 port module Stylesheets exposing (main)
 
 import App.Section.Root.Css as SectionRoot
+import App.Widget.MainMenu.Css as MainMenu
 import Css.File exposing
   ( CssFileStructure
   , CssCompilerProgram
@@ -16,6 +17,7 @@ port files : CssFileStructure -> Cmd msg
 
 stylesheets =
   [ Normalize.css
+  , MainMenu.css
   , SectionRoot.css
   ]
 

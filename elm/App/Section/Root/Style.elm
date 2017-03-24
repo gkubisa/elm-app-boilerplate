@@ -14,7 +14,7 @@ type CssClass
 
 
 namespaceName : String
-namespaceName = "Section"
+namespaceName = "s"
 
 
 namespace : Namespace String class id msg

@@ -5,12 +5,17 @@ module App.Widget.Menu exposing
   , defaultConfig, customConfig
   )
 
+import App.Widget.Menu.Style exposing (namespace, CssClass(..))
 import Html exposing (ul, li, text, a, button, Html)
-import Html.Attributes exposing (href, tabindex, class, classList)
+import Html.Attributes exposing (href)
+import Html.CssHelpers exposing (Namespace)
 import Html.Events exposing (onClick)
+
 
 type alias Label = String
 type alias Url = String
+type alias MenuItems = List MenuItem
+
 
 type MenuItem =
     NavigationLink
@@ -19,46 +24,37 @@ type MenuItem =
       }
   | ParentItem
       { label: Label
-      , menuItems: Menu
+      , menuItems: MenuItems
       }
 
-type alias Menu = List MenuItem
 
 type Model = Model
-  { menuItems: Menu
+  { menuItems: MenuItems
   , expandedParentItem: Maybe MenuItem
   }
+
 
 type Msg =
   ActivateMenuItem MenuItem
 
-type Config = Config
-  { menuClass: String
-  , menuItemListClass: String
-  , menuItemClass: String
-  , menuItemContentClass: String
-  , navigationLinkClass: String
-  , parentItemClass: String
-  , activeClass: String
-  , expandedClass: String
-  }
+
+type Config =
+  Config
+    { namespace: Namespace String CssClass Never Msg
+    }
+
 
 defaultConfig: Config
-defaultConfig = customConfig "Menu"
+defaultConfig = customConfig namespace
 
-customConfig: String -> Config
-customConfig baseClass = Config
-  { menuClass = baseClass
-  , menuItemListClass = baseClass ++ "_itemList"
-  , menuItemClass = baseClass ++ "_item"
-  , menuItemContentClass = baseClass ++ "_itemContent"
-  , activeClass = baseClass ++ "_item-active"
-  , expandedClass = baseClass ++ "_item-expanded"
-  , navigationLinkClass = baseClass ++ "_navigationLink"
-  , parentItemClass = baseClass ++ "_parentItem"
+
+customConfig: (Namespace String CssClass Never Msg) -> Config
+customConfig namespace = Config
+  { namespace = namespace
   }
 
-init: Menu -> (Model, Cmd Msg)
+
+init: MenuItems -> (Model, Cmd Msg)
 init menuItems =
   ( Model
       { menuItems = menuItems
@@ -66,6 +62,7 @@ init menuItems =
       }
   , Cmd.none
   )
+
 
 update: Msg -> Model -> (Model, Cmd Msg)
 update msg (Model model) =
@@ -98,54 +95,60 @@ update msg (Model model) =
           , Cmd.none
           )
 
+
 view: Config -> Model -> Url -> Html Msg
 view (Config config) (Model model) activeUrl =
   let
-    menuItemsView level menuItems =
+    { class, classList } = config.namespace
+
+    menuItemsView level expanded menuItems =
       ul
         [ classList
-            [ (config.menuClass, level == 1)
-            , (config.menuItemListClass, True)
-            , (config.menuItemListClass ++ "-level" ++ (toString level), True)
+            [ (Menu, level == 1)
+            , (Menu_List, True)
+            , (Menu_List_level level, True)
+            , (Menu_List_expanded, expanded)
             ]
         ] <| List.map (menuItemView level) menuItems
 
     menuItemView level menuItem =
-      case menuItem of
-        NavigationLink { label, url } ->
-          let
-            classAttribute = classList
-              [ (config.menuItemClass, True)
-              , (config.navigationLinkClass, True)
-              , (config.activeClass, isActive activeUrl menuItem)
-              ]
-          in
-            li [ classAttribute ]
-              [ a [ class config.menuItemContentClass
+      let
+        itemClass = class
+          [ Menu_Item
+          , Menu_Item_level level
+          ]
+        contentClass = classList
+          [ (Menu_Content, True)
+          , (Menu_Content_level level, True)
+          , (Menu_Content_active, isActive activeUrl menuItem)
+          ]
+        clickHandler = onClick (ActivateMenuItem menuItem)
+      in
+        case menuItem of
+          NavigationLink { label, url } ->
+            li [ itemClass ]
+              [ a
+                  [ contentClass
+                  , clickHandler
                   , href url
-                  , onClick (ActivateMenuItem menuItem)
                   ]
                   [ text label ]
               ]
-        ParentItem { label, menuItems } ->
-          let
-            classListAttribute = classList
-              [ (config.menuItemClass, True)
-              , (config.parentItemClass, True)
-              , (config.expandedClass, isJustMember model.expandedParentItem [menuItem])
-              , (config.activeClass, isActive activeUrl menuItem)
-              ]
-          in
-            li [ classListAttribute ]
-              [ button
-                  [ class config.menuItemContentClass
-                  , onClick (ActivateMenuItem menuItem)
-                  ]
-                  [ text label ]
-              , menuItemsView (level + 1) menuItems
-              ]
+          ParentItem { label, menuItems } ->
+            let
+              expanded = isJustMember model.expandedParentItem [menuItem]
+            in
+              li [ itemClass ]
+                [ button
+                    [ contentClass
+                    , clickHandler
+                    ]
+                    [ text label ]
+                , menuItemsView (level + 1) expanded menuItems
+                ]
   in
-    menuItemsView 1 model.menuItems
+    menuItemsView 1 True model.menuItems
+
 
 navigationLink: Label -> Url -> MenuItem
 navigationLink label url =
@@ -154,17 +157,19 @@ navigationLink label url =
     , url = url
     }
 
-parentItem: Label -> Menu -> MenuItem
+
+parentItem: Label -> MenuItems -> MenuItem
 parentItem label menuItems =
   ParentItem
     { label = label
     , menuItems = menuItems
     }
 
+
 {-| Recursively searches the provided list, and returns the first item matching
 the predicate.
 -}
-findMenuItem: (MenuItem -> Bool) -> Menu -> Maybe MenuItem
+findMenuItem: (MenuItem -> Bool) -> MenuItems -> Maybe MenuItem
 findMenuItem predicate items =
   case items of
     item :: remainingItems ->
@@ -183,16 +188,18 @@ findMenuItem predicate items =
     [] ->
       Nothing
 
+
 {-| Recursively searches the provided list, and returns true, if any of the
 menu items matches the predicate.
 -}
-anyMenuItem: (MenuItem -> Bool) -> Menu -> Bool
+anyMenuItem: (MenuItem -> Bool) -> MenuItems -> Bool
 anyMenuItem predicate items =
   case findMenuItem predicate items of
     Just _ ->
       True
     _ ->
       False
+
 
 {-| Determines if the second menu item is the parent of the first menu item.
 -}
@@ -204,16 +211,18 @@ isParentOf childItem parentItem =
     _ ->
       False
 
+
 {-| Recursively checks, if `item` is a member of the specified list.
 -}
-isMember: MenuItem -> Menu -> Bool
+isMember: MenuItem -> MenuItems -> Bool
 isMember item =
   anyMenuItem ((==) item)
+
 
 {-| Recursively checks, if the item inside `maybeItem` is a member of the
 specified list.
 -}
-isJustMember: Maybe MenuItem -> Menu -> Bool
+isJustMember: Maybe MenuItem -> MenuItems -> Bool
 isJustMember maybeItem menuItems =
   case maybeItem of
     Just item ->
@@ -221,11 +230,13 @@ isJustMember maybeItem menuItems =
     _ ->
       False
 
+
 {-| Recursively searches for the parent of `childItem`.
 -}
-findParent: MenuItem -> Menu -> Maybe MenuItem
+findParent: MenuItem -> MenuItems -> Maybe MenuItem
 findParent childItem =
   findMenuItem (isParentOf childItem)
+
 
 {-| Determines, if the specified menu item is active.
 -}
