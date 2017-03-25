@@ -59,10 +59,6 @@ const config = {
       {
         test: /\/Main\.elm$/,
         loader: `${START ? 'elm-hot!' : ''}elm-webpack?verbose=true&warn=true${START ? '&debug=true' : ''}&pathToMake=node_modules/.bin/elm-make`
-      },
-      {
-        test: /\/Stylesheets\.elm$/,
-        loader: "style!css!elm-css-webpack"
       }
     ]
   },
@@ -94,13 +90,13 @@ const config = {
 }
 
 if (START) {
-  config.module.loaders.push({ test: /\.less$/, loader: 'style!css!postcss-loader!less' })
+  config.module.loaders.push({ test: /\/Stylesheets\.elm$/, loader: 'style!css!postcss!elm-css' })
 }
 if (BUILD) {
   config.output.filename = config.output.filename.replace('[hash]', '[chunkhash]')
 
   // put styles in a separate file
-  config.module.loaders.push({ test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css!postcss-loader!less') })
+  config.module.loaders.push({ test: /\/Stylesheets\.elm$/, loader: ExtractTextPlugin.extract('style', 'css!postcss!elm-css') })
   config.plugins.push(new ExtractTextPlugin(process.env.BASE_PATH + '/[name].[contenthash].css'))
 
   // ensure the JS file 'chunkhash' does not change when only the styles change

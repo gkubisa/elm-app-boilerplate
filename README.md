@@ -9,6 +9,7 @@ Provides an efficient development workflow and a starting point for building Elm
 
 - automated build of all application resources using [webpack](http://webpack.github.io/)
 - Hot Module Replacement for the Elm code using [elm-hot-loader](https://github.com/fluxxu/elm-hot-loader)
+- styling using [elm-css](https://github.com/rtfeldman/elm-css)
 - automatic re-execution of tests on source change for Elm and JavaScript code
 - test coverage using [istanbul](https://github.com/gotwarlost/istanbul) for the JavaScript tests
 - JavaScript code written in ES6, transpiled using [Babel](https://babeljs.io/)
@@ -133,15 +134,19 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `elm-package.json` - describes the Elm application and its dependencies
 - `elm/` - Elm source files
 - `elm/Main.elm` - Elm application entry point
+- `elm/Stylesheets.elm` - elm-css entry point, lists all the stylesheets which need to be processed
 - `elm/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
 - `elm/App/` - the namespace for all application Elm modules
 - `elm/App/Etc/` - contains configuration modules
 - `elm/App/Etc/Tests.elm` - the main file loading and exposing all the test suites
 - `elm/App/Etc/Config.elm` - the Elm app configuration
-- `elm/App/Section/` - contains all sections. A section groups related pages and manages routing within its group.
+- `elm/App/Etc/Style.elm` - the configuration for stylesheets, including the color palette, device breakpoints, font sizes, etc
+- `elm/App/Section/` - contains all sections. A section groups related pages and manages routing within its group
 - `elm/App/Section/<SomeSection>/Route.elm` - contains route mappings and helpers for `<SomeSection>`
-- `elm/App/Page/` - contains all pages. A page is responsible for the main content of its section.
+- `elm/App/Page/` - contains all pages. Page are responsible for the main contents of their sections
 - `elm/App/Widget/` - contains all reusable widgets
+- `elm/App/**/<SomeModule>/Css.elm` - contains the CSS rules for `<SomeModule>` defined using `elm-css`
+- `elm/App/**/<SomeModule>/Style.elm` - contains style-related types and definitions for `<SomeModule>`, which are shared between the application and the Elm CSS modules
 - `elm/App/**/<SomeModule>/Test.elm` - contains tests for `<SomeModule>`
 
 ### JavaScript
@@ -160,10 +165,44 @@ The parameters to those commands must be specified after `--`, for example: `npm
 - `html-minifier.json` - configuration file used by the `html-minifier`
 - `html/index.html` - overall application entry point
 
-### Styles
 
-- `styles/App/` - contains styles for all components
-- `styles/Config.less` - global LESS variables defining things like the color scheme, breakpoints for media queries, font sizes, etc
-- `styles/Global.less` - some universally applicable styles for HTML elements
-- `styles/Main.less` - the entry point for the LESS compiler
-- `styles/Util.less` - reusable LESS mixins
+## Styling Conventions
+
+Use a [BEM](http://getbem.com/)-like methodology for styling.
+
+Because the CSS class names are generated from the Elm class names, it is not feeasible to follow the BEM class name format. So, here's an alternative:
+
+- Using the `elm-css` `namespace`'s, prefix the CSS class names with a letter "p", "s", "w" corresponding to the folder in which the component is located - "Page", "Section", "Widget" respectively. It allows to quickly find the Elm components based on the CSS class names during debugging.
+- Specify longer `namespace`s when you're creating specializations of other components. For example, the `Menu` component uses "w" prefix by default. The `MainMenu` component is a specialization of the `Menu` component, so it uses "wMain" prefix. When combined with the `Menu`'s `CssClass`'es, the generated CSS class names correspond to the `MainMenu` component name, that is, *block*-level class is `wMainMenu`.
+- Separate the *block*s, *element*s and *modifier*s with a single underscore.
+- Use *PascalCase* for the *block* and *element* names.
+- Use *camelCase* for the *modifier* names.
+- Avoid passing parameters to `CssClass` constructors as much as possible, because they limit the safety guarantees afforded by `elm-css`. If the parameters are really necessary, try to limit yourself to Int only.
+
+Here's an example - using the following Elm definitions:
+
+```
+namespace = withNamespace "w"
+type CssClass
+  = Block
+  | Block_modifier
+  | Block_modifierWithParam Int
+  | Block_Element
+  | Block_Element_modifier
+  | Block_Element_modifierWithParam Int
+```
+
+we can get CSS class names like these:
+
+```
+.wBlock
+.wBlock_modifier
+.wBlock_modifierWithParam-1
+.wBlock_modifierWithParam-2
+.wBlock_modifierWithParam-3
+.wBlock_Element
+.wBlock_Element_modifier
+.wBlock_Element_modifierWithParam-1
+.wBlock_Element_modifierWithParam-2
+.wBlock_Element_modifierWithParam-3
+```
