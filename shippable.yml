@@ -13,6 +13,7 @@ build:
   post_ci:
     - >-
        if [ "$IS_RELEASE" == "true" ] && [ "$IS_FORK" == "false" ]; then
+       npm run clean &&
        BASE_PATH=/elm-app-boilerplate npm run build &&
        git clone . /tmp/demo &&
        cd /tmp/demo &&
@@ -22,8 +23,8 @@ build:
        git fetch &&
        git checkout gh-pages &&
        rm -r * &&
-       cp -r ${SHIPPABLE_BUILD_DIR}/dist/elm-app-boilerplate/* . &&
-       cp ${SHIPPABLE_BUILD_DIR}/dist/index.html 404.html &&
+       cp -r ${SHIPPABLE_BUILD_DIR}/dist/* . &&
+       mv index.html 404.html &&
        git add -A . &&
        git commit -m "Update demo for ${GIT_TAG_NAME} [skip ci]" &&
        shippable_retry git push origin gh-pages;
