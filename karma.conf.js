@@ -1,6 +1,7 @@
+const webpack = require('webpack')
 const path = require('path')
 
-const jsDir = path.resolve(__dirname, 'js') + '/'
+const jsDir = path.resolve('js') + '/'
 const jsTestFiles = [
   path.join(jsDir, 'tests.js'),
   /\.test.js$/
@@ -43,22 +44,52 @@ module.exports = function (config) {
     webpack: {
       devtool: 'inline-source-map',
       module: {
-        loaders: [
+        rules: [
           // ES6
-          {test: /\.js$/, include: [jsDir], loader: 'babel'},
+          {
+            test: /\.js$/,
+            include: [jsDir],
+            loader: 'babel-loader'
+          },
 
           // eslint
-          {test: /\.js$/, include: jsTestFiles, loader: 'eslint-loader?{configFile:".eslintrc.test.yml"}'},
-          {test: /\.js$/, include: [jsDir], exclude: jsTestFiles, loader: 'eslint-loader?{configFile:".eslintrc.yml"}' },
+          {
+            enforce: 'pre',
+            test: /\.js$/,
+            include: jsTestFiles,
+            loader: 'eslint-loader',
+            options: {
+              configFile: '.eslintrc.test.yml'
+            }
+          },
+          {
+            enforce: 'pre',
+            test: /\.js$/,
+            include: [jsDir],
+            exclude: jsTestFiles,
+            loader: 'eslint-loader',
+            options: {
+              configFile: '.eslintrc.yml'
+            }
+          },
 
           // don't bother loading these properly for unit tests
-          {test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?|less)$/, loader: 'raw'}
+          {
+            test: /\.(png|jpg|gif|svg|ttf|otf|eot|svg|woff2?|less)$/,
+            loader: 'raw-loader'
+          }
         ]
       },
-      eslint: {
-        failOnWarning: true,
-        failOnError: true
-      }
+      plugins: [
+        new webpack.LoaderOptionsPlugin({
+          options: {
+            eslint: {
+              failOnWarning: true,
+              failOnError: true
+            }
+          }
+        })
+      ]
     },
 
     webpackServer: {
