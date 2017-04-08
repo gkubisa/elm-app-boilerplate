@@ -5,8 +5,10 @@ import Html.CssHelpers exposing (Namespace, withNamespace)
 
 
 namespaceName : String
-namespaceName = "wMain"
+namespaceName =
+    "wMain"
 
 
 namespace : Namespace String CssClass Never msg
-namespace = withNamespace namespaceName
+namespace =
+    withNamespace namespaceName

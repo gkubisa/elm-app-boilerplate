@@ -16,6 +16,7 @@ Provides an efficient development workflow and a starting point for building Elm
 - JavaScript linted using [eslint](http://eslint.org/)
 - continuous integration and deployment based on [Shippable](https://app.shippable.com/)
 - dependency checking using [npm-check-updates](https://github.com/tjunnone/npm-check-updates)
+- consistent code formatting using [elm-format](https://github.com/avh4/elm-format)
 
 
 ## Getting Started
