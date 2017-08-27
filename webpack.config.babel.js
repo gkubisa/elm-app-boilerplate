@@ -32,7 +32,7 @@ const config = {
   },
 
   module: {
-    noParse: /\/Main\.elm$/,
+    noParse: /[\/\\]Main\.elm$/,
     rules: [
       {
         enforce: 'pre',
@@ -55,7 +55,7 @@ const config = {
         }
       },
       {
-        test: /\/Main\.elm$/,
+        test: /[\/\\]Main\.elm$/,
         use: [
           {
             loader: isDev ? 'elm-hot-loader' : 'noop-loader'
@@ -72,7 +72,7 @@ const config = {
         ]
       },
       {
-        test: /\/Stylesheets\.elm$/,
+        test: /[\/\\]Stylesheets\.elm$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
