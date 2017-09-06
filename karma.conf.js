@@ -15,7 +15,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai-sinon', 'dirty-chai', 'chai'],
+    frameworks: ['mocha'],
 
     // list of files/patterns to load in the browser
     files: [
@@ -26,9 +26,6 @@ module.exports = function (config) {
     exclude: [],
 
     plugins: [
-      require('karma-chai'),
-      require('karma-chai-sinon'),
-      require('karma-dirty-chai'),
       require('karma-coverage'),
       require('karma-phantomjs-launcher'),
       require('karma-mocha'),
