@@ -67,7 +67,7 @@ On success, the demo app is deployed to [elm-app-boilerplate GitHub Pages](http:
 
 ## Build Configuration Using Environment Variables
 
-The default environment variables used by the build scripts are defined in the `.env` file. The defaults are always overridden by the variables defined in the environment. They are useful for abstracting away the differences between the development and production platforms. For example, the following command builds the application with a custom `BASE_PATH` suitable for deployment to GitHub Project Pages.
+The default environment variables used by the build scripts are defined in the `.env` file. The defaults are always overridden by the variables defined in the environment. They are useful for abstracting away the differences between the development and production environments. For example, the following command builds the application with a custom `BASE_PATH` suitable for deployment to GitHub Project Pages.
 
 ```
 BASE_PATH=/elm-app-boilerplate npm run build
@@ -86,14 +86,14 @@ This project customizes the standard `npm version` script to also:
 
 - ensure that the dependencies are up to date
 - execute all tests
-- update the version in `elm-package.json`
+- update the version in `elm-package.json` and `tests/elm-package.json`
 - push the branch on which the version change was made
 - push the created tag
 
 
 ## Updating Dependencies
 
-Dependeny check and update is handled by [ncu](https://github.com/tjunnone/npm-check-updates). A check runs automatically every time `npm version` is executed but can also be triggered explicitly.
+Dependency check and update is handled by [ncu](https://github.com/tjunnone/npm-check-updates). A check runs automatically every time `npm version` is executed but can also be triggered explicitly.
 
 ```
 npm run ncu # checks the dependencies in package.json
@@ -133,22 +133,21 @@ The parameters to those commands must be specified after `--`, for example: `npm
 ### Elm
 
 - `elm-package.json` - describes the Elm application and its dependencies
-- `elm/` - Elm source files
-- `elm/Main.elm` - Elm application entry point
-- `elm/Stylesheets.elm` - elm-css entry point, lists all the stylesheets which need to be processed
-- `elm/TestRunner.elm` - the entry point for executing tests and bootstrapping the actual test runner
-- `elm/App/` - the namespace for all application Elm modules
-- `elm/App/Etc/` - contains configuration modules
-- `elm/App/Etc/Tests.elm` - the main file loading and exposing all the test suites
-- `elm/App/Etc/Config.elm` - the Elm app configuration
-- `elm/App/Etc/Style.elm` - the configuration for stylesheets, including the color palette, device breakpoints, font sizes, etc
-- `elm/App/Section/` - contains all sections. A section groups related pages and manages routing within its group
-- `elm/App/Section/<SomeSection>/Route.elm` - contains route mappings and helpers for `<SomeSection>`
-- `elm/App/Page/` - contains all pages. Page are responsible for the main contents of their sections
-- `elm/App/Widget/` - contains all reusable widgets
-- `elm/App/**/<SomeModule>/Css.elm` - contains the CSS rules for `<SomeModule>` defined using `elm-css`
-- `elm/App/**/<SomeModule>/Style.elm` - contains style-related types and definitions for `<SomeModule>`, which are shared between the application and the Elm CSS modules
-- `elm/App/**/<SomeModule>/Test.elm` - contains tests for `<SomeModule>`
+- `src/` - Elm source files
+- `src/Main.elm` - Elm application entry point
+- `src/Stylesheets.elm` - elm-css entry point, lists all the stylesheets which need to be processed
+- `src/App/` - the namespace for all application Elm modules
+- `src/App/Etc/` - contains configuration modules
+- `src/App/Etc/Config.elm` - the Elm app configuration
+- `src/App/Etc/Style.elm` - the configuration for stylesheets, including the color palette, device breakpoints, font sizes, etc
+- `src/App/Section/` - contains all sections. A section groups related pages and manages routing within its group
+- `src/App/Section/<SomeSection>/Route.elm` - contains route mappings and helpers for `<SomeSection>`
+- `src/App/Page/` - contains all pages. Page are responsible for the main contents of their sections
+- `src/App/Widget/` - contains all reusable widgets
+- `src/App/**/<SomeModule>/Css.elm` - contains the CSS rules for `<SomeModule>` defined using `elm-css`
+- `src/App/**/<SomeModule>/Style.elm` - contains style-related types and definitions for `<SomeModule>`, which are shared between the application and the Elm CSS modules
+- `tests/elm-package.json` - defines dependencies for running tests
+- `tests/App/**/<SomeModule>Test.elm` - contains tests for `<SomeModule>`
 
 ### JavaScript
 
@@ -171,7 +170,7 @@ The parameters to those commands must be specified after `--`, for example: `npm
 
 Use a [BEM](http://getbem.com/)-like methodology for styling.
 
-Because the CSS class names are generated from the Elm class names, it is not feeasible to follow the BEM class name format. So, here's an alternative:
+Because the CSS class names are generated from the Elm class names, it is not feasible to follow the BEM class name format. So, here's an alternative:
 
 - Using the `elm-css` `namespace`'s, prefix the CSS class names with a letter "p", "s", "w" corresponding to the folder in which the component is located - "Page", "Section", "Widget" respectively. It allows to quickly find the Elm components based on the CSS class names during debugging.
 - Specify longer `namespace`s when you're creating specializations of other components. For example, the `Menu` component uses "w" prefix by default. The `MainMenu` component is a specialization of the `Menu` component, so it uses "wMain" prefix. When combined with the `Menu`'s `CssClass`'es, the generated CSS class names correspond to the `MainMenu` component name, that is, *block*-level class is `wMainMenu`.

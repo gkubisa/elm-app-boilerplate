@@ -1,4 +1,6 @@
 /elm-stuff/
+/tests/elm-stuff/
 /node_modules/
 /dist/
 /coverage/
+/npm-debug.log

@@ -1,5 +1,5 @@
 import './polyfill/origin'
-import '../elm/Stylesheets'
-import Elm from '../elm/Main'
+import '../src/Stylesheets'
+import Elm from '../src/Main'
 
 Elm.Main.embed(document.getElementById('elm'), __CONFIG__)
